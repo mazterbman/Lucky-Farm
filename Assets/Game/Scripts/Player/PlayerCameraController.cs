@@ -28,6 +28,7 @@ namespace Game.Scripts.Player
         {
             _scrollTokenSource?.Dispose();
             _scrollTokenSource = new CancellationTokenSource();
+            _splineDolly.CameraPosition = 0f;
             _scrollAction.action.performed += ChangeSplinePosition;
         }
 
