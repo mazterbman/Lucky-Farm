@@ -684,7 +684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Player.PlayerCameraController
   _splineDolly: {fileID: 0}
   _scrollAction: {fileID: 0}
-  _scrollSensitivity: 1
+  _scrollSens: 1.5
+  _scrollTime: 0.15
 --- !u!1 &430894457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,6 +1190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Installers.PlayerCameraInstaller
   _splineDolly: {fileID: 316185331}
   _scrollAction: {fileID: 3188524013404466868, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _camera: {fileID: 308453296}
 --- !u!114 &1029256903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1826,6 +1828,7 @@ GameObject:
   - component: {fileID: 1776161804}
   - component: {fileID: 1776161803}
   - component: {fileID: 1776161802}
+  - component: {fileID: 1776161805}
   m_Layer: 0
   m_Name: CanvasHealth
   m_TagString: Untagged
@@ -1917,6 +1920,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1776161805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776161800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700de779146115e49b68a44f84e5ea41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.TrackPlayerView
+  _camera: {fileID: 0}
 --- !u!1 &1824358583
 GameObject:
   m_ObjectHideFlags: 0
