@@ -12,9 +12,9 @@ namespace Game.Scripts.Mobs
     {
         [Header("References")] 
         [SerializeField] private NavMeshAgent _navMeshAgent = null;
-        
-        [Header("References Injected")] 
-        [Inject] [SerializeField] private NavMeshSurface _meshSurface = null;
+
+        [Header("References Injected")]
+        [Inject] [SerializeField] private MobData _mobData;
         
         [Header("Wander Settings")] 
         [SerializeField] private float _walkRadius = 10f;
@@ -24,6 +24,7 @@ namespace Game.Scripts.Mobs
         [Header("Debug")] 
         [SerializeField] private bool _debugMode = true;
         
+        private NavMeshSurface _meshSurface = null;
         private MobMovementState _currentState = MobMovementState.Wandering;
         private Vector3 _startPosition;
         private bool _isWaiting = false;
@@ -39,7 +40,12 @@ namespace Game.Scripts.Mobs
             MovingToTarget, // Движение к конкретной точке
             ReturningToWander // Возврат к блужданию
         }
-        
+
+        private void Awake()
+        {
+            _meshSurface = _mobData.MeshSurface;
+        }
+
         private void Start()
         {
             UpdateWanderCenter(_meshSurface.transform.position);
