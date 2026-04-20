@@ -6,8 +6,7 @@ namespace Game.Scripts.Installers
 {
     public class MobInstaller : MonoInstaller
     {
-        [SerializeField]
-        private NavMeshSurface _meshSurface = null;
+        [SerializeField] private NavMeshSurface _meshSurface = null;
     
         public override void InstallBindings()
         {

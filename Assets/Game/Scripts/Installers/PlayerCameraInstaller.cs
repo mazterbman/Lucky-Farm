@@ -7,14 +7,9 @@ namespace Game.Scripts.Installers
 {
     public class PlayerCameraInstaller : MonoInstaller
     {
-        [SerializeField]
-        private CinemachineSplineDolly _splineDolly = null;
-        
-        [SerializeField]
-        private InputActionReference _scrollAction = null;
-        
-        [SerializeField]
-        private Camera _camera;
+        [SerializeField] private CinemachineSplineDolly _splineDolly = null;
+        [SerializeField] private InputActionReference _scrollAction = null;
+        [SerializeField] private Camera _camera;
         
         public override void InstallBindings()
         {

@@ -6,17 +6,13 @@ namespace Game.Scripts.Mobs
 {
     public class TrackPlayerView : MonoBehaviour
     {
-        [Header("References Injected")] [Inject] [SerializeField]
-        private Camera _camera = null;
+        [Header("References Injected")] 
+        [Inject] [SerializeField] private Camera _camera = null;
 
-        [Header("Tracking Settings")] [SerializeField] 
-        private TrackMode _trackMode = TrackMode.FullLookAt;
-        
-        [SerializeField]
-        private bool _ignoreVerticalRotation = false;
-        
-        [SerializeField]
-        private Vector3 _rotationOffset = Vector3.zero;
+        [Header("Tracking Settings")] 
+        [SerializeField] private TrackMode _trackMode = TrackMode.FullLookAt;
+        [SerializeField] private bool _ignoreVerticalRotation = false;
+        [SerializeField] private Vector3 _rotationOffset = Vector3.zero;
 
         private enum TrackMode
         {

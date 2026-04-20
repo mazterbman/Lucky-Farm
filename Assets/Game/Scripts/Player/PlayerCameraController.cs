@@ -10,17 +10,13 @@ namespace Game.Scripts.Player
 {
     public class PlayerCameraController : MonoBehaviour
     {
-        [Header("References Injected")] [Inject] [SerializeField]
-        private CinemachineSplineDolly _splineDolly = null;
+        [Header("References Injected")] 
+        [Inject] [SerializeField] private CinemachineSplineDolly _splineDolly = null;
+        [Inject] [SerializeField] private InputActionReference _scrollAction = null;
         
-        [Inject] [SerializeField]
-        private InputActionReference _scrollAction = null;
-        
-        [Header("Settings")] [SerializeField]
-        private float _scrollSens = 1f;
-        
-        [SerializeField] [Range(0.1f, 1f)]
-        private float _scrollTime = 0.5f;
+        [Header("Settings")] 
+        [SerializeField] private float _scrollSens = 1f;
+        [SerializeField] [Range(0.1f, 1f)] private float _scrollTime = 0.5f;
 
         private CancellationTokenSource _scrollTokenSource = null;
         
