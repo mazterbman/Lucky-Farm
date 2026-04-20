@@ -1,4 +1,4 @@
-using System;
+using Game.Scripts.Player;
 using UnityEngine;
 using Zenject;
 
@@ -7,12 +7,14 @@ namespace Game.Scripts.Mobs
     public class TrackPlayerView : MonoBehaviour
     {
         [Header("References Injected")] 
-        [Inject] [SerializeField] private Camera _camera = null;
+        [Inject] [SerializeField] private PlayerCameraData _cameraData = null;
 
         [Header("Tracking Settings")] 
         [SerializeField] private TrackMode _trackMode = TrackMode.FullLookAt;
         [SerializeField] private bool _ignoreVerticalRotation = false;
         [SerializeField] private Vector3 _rotationOffset = Vector3.zero;
+        
+        private Camera _camera = null;
 
         private enum TrackMode
         {
@@ -21,7 +23,12 @@ namespace Game.Scripts.Mobs
             YAxisOnly,            // Только поворот по Y (для персонажей)
             CanvasWorld           // Специально для World Space Canvas
         }
-        
+
+        private void Awake()
+        {
+            _camera = _cameraData.Camera;
+        }
+
         private void Update()
         {
             switch (_trackMode)

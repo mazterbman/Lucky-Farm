@@ -227,7 +227,7 @@ Transform:
   m_GameObject: {fileID: 225777375}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 8}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -649,7 +649,7 @@ Transform:
   m_GameObject: {fileID: 316185328}
   serializedVersion: 2
   m_LocalRotation: {x: 0.4189849, y: 0, z: 0, w: 0.9079932}
-  m_LocalPosition: {x: 0, y: 25, z: -17.5}
+  m_LocalPosition: {x: 0, y: 25, z: -25.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -681,15 +681,19 @@ MonoBehaviour:
   AutomaticDolly:
     Enabled: 0
     Method:
-      rid: -2
+      rid: 9024493928846983316
   m_LegacyPosition: -1
   m_LegacyUnits: 0
   m_LegacySpline: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 9024493928846983316
+      type: {class: SplineAutoDolly/NearestPointToTarget, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
+      data:
+        PositionOffset: 0
+        SearchResolution: 4
+        SearchIteration: 2
 --- !u!114 &316185332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,10 +719,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d516fb158adec4c4a9f70e7c479c4ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Player.PlayerCameraController
-  _splineDolly: {fileID: 0}
-  _scrollAction: {fileID: 0}
+  _cameraData:
+    SplineDolly: {fileID: 0}
+    Camera: {fileID: 0}
+    ScrollAction: {fileID: 0}
+    RotationActionLeft: {fileID: 0}
+    RotationActionRight: {fileID: 0}
   _scrollSens: 1.5
   _scrollTime: 0.15
+  _rotationSens: 1
+  _rotationTime: 0.5
 --- !u!1 &430894457
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +897,7 @@ Transform:
   m_GameObject: {fileID: 506391812}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 4.93}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -930,7 +940,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobPathController
   _navMeshAgent: {fileID: 506391814}
-  _meshSurface: {fileID: 0}
+  _mobData:
+    MeshSurface: {fileID: 0}
   _walkRadius: 10
   _minWaitTime: 1
   _maxWaitTime: 3
@@ -1055,7 +1066,7 @@ Transform:
   m_GameObject: {fileID: 574722330}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17, y: 2.5, z: 12}
+  m_LocalPosition: {x: 17, y: 2.5, z: 4}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1263,9 +1274,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e11bab8fba9b9b1438873a9f8e64331a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Installers.PlayerCameraInstaller
-  _splineDolly: {fileID: 316185331}
-  _scrollAction: {fileID: 3188524013404466868, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  _camera: {fileID: 308453296}
+  _cameraData:
+    SplineDolly: {fileID: 316185331}
+    Camera: {fileID: 308453296}
+    ScrollAction: {fileID: 3188524013404466868, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    RotationActionLeft: {fileID: -3890300258564413785, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    RotationActionRight: {fileID: -1405929057325664271, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &956663633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,7 +1324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d329db9dce640134db853dfb0c541ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobInstaller
-  _meshSurface: {fileID: 225777380}
+  _mobData:
+    MeshSurface: {fileID: 225777380}
 --- !u!114 &1029256903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1431,7 +1446,7 @@ Transform:
   m_GameObject: {fileID: 1089020600}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17, y: 2.5, z: 12}
+  m_LocalPosition: {x: -17, y: 2.5, z: 4}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1616,7 +1631,7 @@ Transform:
   m_GameObject: {fileID: 1410133771}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17, y: 2.5, z: -2}
+  m_LocalPosition: {x: 17, y: 2.5, z: -10}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1818,7 +1833,7 @@ Transform:
   m_GameObject: {fileID: 1740915910}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17, y: 2.5, z: -2}
+  m_LocalPosition: {x: -17, y: 2.5, z: -10}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1973,7 +1988,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.052}
+  m_AnchoredPosition: {x: 0, y: 0.76}
   m_SizeDelta: {x: 1920, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1776161802
@@ -2052,7 +2067,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 700de779146115e49b68a44f84e5ea41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.TrackPlayerView
-  _camera: {fileID: 0}
+  _cameraData:
+    SplineDolly: {fileID: 0}
+    Camera: {fileID: 0}
+    ScrollAction: {fileID: 0}
+    RotationActionLeft: {fileID: 0}
+    RotationActionRight: {fileID: 0}
   _trackMode: 3
   _ignoreVerticalRotation: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
@@ -2260,7 +2280,7 @@ Transform:
   m_GameObject: {fileID: 1885488407}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 2.5, z: -8}
+  m_LocalPosition: {x: 4, y: 2.5, z: -16}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2404,7 +2424,7 @@ Transform:
   m_GameObject: {fileID: 1902824471}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 26}
+  m_LocalPosition: {x: 0, y: 2.5, z: 18}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2591,7 +2611,7 @@ Transform:
   m_GameObject: {fileID: 2072094543}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.5, z: -8}
+  m_LocalPosition: {x: -2, y: 2.5, z: -16}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2608,7 +2628,7 @@ GameObject:
   - component: {fileID: 2132446891}
   - component: {fileID: 2132446890}
   m_Layer: 0
-  m_Name: Spline
+  m_Name: SplineZoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2645,7 +2665,7 @@ MonoBehaviour:
     - Position:
         x: 0
         y: 25
-        z: -17.5
+        z: -25.5
       TangentIn:
         x: 0
         y: 0
@@ -2663,7 +2683,7 @@ MonoBehaviour:
     - Position:
         x: 0
         y: 10
-        z: -11
+        z: -19
       TangentIn:
         x: 0
         y: 0
