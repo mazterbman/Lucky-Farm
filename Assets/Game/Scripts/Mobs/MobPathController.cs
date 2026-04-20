@@ -1,7 +1,9 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using Zenject;
 
 namespace Game.Scripts.Mobs
@@ -26,9 +28,8 @@ namespace Game.Scripts.Mobs
         private Vector3 _startPosition;
         private bool _isWaiting = false;
         private float _waitTimer = 0f;
-        private Action _onDestinationReached = null;
+        private UnityAction _onDestinationReached = null;
         
-        // Для хранения точки назначения
         private Vector3 _targetDestination;
         private bool _hasTarget = false;
         
@@ -41,15 +42,27 @@ namespace Game.Scripts.Mobs
         
         private void Start()
         {
-            _startPosition = transform.position;
-            SetRandomDestination();
+            UpdateWanderCenter(_meshSurface.transform.position);
+            SetRandomDestination().Forget();
         }
         
         private void Update()
         {
+            if (_isWaiting)
+            {
+                _waitTimer -= Time.deltaTime;
+                if (_waitTimer <= 0f)
+                {
+                    _isWaiting = false;
+                    SetRandomDestination().Forget();
+                }
+                return;
+            }
+            
             switch (_currentState)
             {
                 case MobMovementState.Wandering:
+                    UpdateWanderCenter(transform.position);
                     UpdateWandering();
                     break;
                 case MobMovementState.MovingToTarget:
@@ -65,24 +78,13 @@ namespace Game.Scripts.Mobs
         
         private void UpdateWandering()
         {
-            if (_isWaiting)
-            {
-                _waitTimer -= Time.deltaTime;
-                if (_waitTimer <= 0f)
-                {
-                    _isWaiting = false;
-                    SetRandomDestination();
-                }
-                return;
-            }
-            
             if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
             {
                 StartWaiting();
             }
         }
         
-        private void SetRandomDestination()
+        private async UniTask SetRandomDestination()
         {
             Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * _walkRadius;
             randomDirection += _startPosition;
@@ -98,7 +100,8 @@ namespace Game.Scripts.Mobs
             }
             else
             {
-                SetRandomDestination(); // Повторная попытка
+                await UniTask.Yield();
+                await SetRandomDestination(); // Повторная попытка
             }
         }
         
@@ -116,17 +119,17 @@ namespace Game.Scripts.Mobs
         {
             if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
             {
-                // Достигли цели
                 OnTargetReached();
             }
         }
         
         private void OnTargetReached()
         {
+            UpdateWanderCenter(transform.position);
+            
             _onDestinationReached?.Invoke();
             _onDestinationReached = null;
             
-            // Возвращаемся к блужданию
             ReturnToWandering();
         }
         
@@ -136,15 +139,15 @@ namespace Game.Scripts.Mobs
         
         private void UpdateReturningToWander()
         {
-            if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
-            {
-                // Вернулись в режим блуждания
-                _currentState = MobMovementState.Wandering;
-                StartWaiting(); // Небольшая пауза перед следующим шагом
+            if (_navMeshAgent.pathPending ||
+                !(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)) return;
+            
+            // Вернулись в режим блуждания
+            _currentState = MobMovementState.Wandering;
+            StartWaiting(); // Небольшая пауза перед следующим шагом
                 
-                if (_debugMode)
-                    Debug.Log($"[{gameObject.name}] Returned to wandering mode");
-            }
+            if (_debugMode)
+                Debug.Log($"[{gameObject.name}] Returned to wandering mode");
         }
         
         #endregion
@@ -157,7 +160,7 @@ namespace Game.Scripts.Mobs
         /// <param name="destination">Точка назначения</param>
         /// <param name="onReached">Колбэк при достижении цели</param>
         /// <param name="interruptWander">Прервать ли текущее блуждание</param>
-        public void MoveToPoint(Vector3 destination, Action onReached = null, bool interruptWander = true)
+        public void MoveToPoint(Vector3 destination, UnityAction onReached = null, bool interruptWander = true)
         {
             // Проверяем, находится ли точка на NavMesh
             if (!NavMesh.SamplePosition(destination, out NavMeshHit hit, 5f, NavMesh.AllAreas))
@@ -171,24 +174,23 @@ namespace Game.Scripts.Mobs
             _onDestinationReached = onReached;
             
             // Прерываем текущие действия
-            if (interruptWander)
-            {
-                _isWaiting = false;
-                _currentState = MobMovementState.MovingToTarget;
-                _navMeshAgent.SetDestination(_targetDestination);
+            if (!interruptWander) return;
+            
+            _isWaiting = false;
+            _currentState = MobMovementState.MovingToTarget;
+            _navMeshAgent.SetDestination(_targetDestination);
                 
-                if (_debugMode)
-                {
-                    Debug.Log($"[{gameObject.name}] Moving to point: {_targetDestination}");
-                    Debug.DrawLine(transform.position, _targetDestination, Color.red, 5f);
-                }
+            if (_debugMode)
+            {
+                Debug.Log($"[{gameObject.name}] Moving to point: {_targetDestination}");
+                Debug.DrawLine(transform.position, _targetDestination, Color.red, 5f);
             }
         }
         
         /// <summary>
         /// Отправить NPC к определенному трансформу
         /// </summary>
-        public void MoveToTransform(Transform target, Action onReached = null, bool interruptWander = true)
+        public void MoveToTransform(Transform target, UnityAction onReached = null, bool interruptWander = true)
         {
             if (target == null)
             {
@@ -209,7 +211,7 @@ namespace Game.Scripts.Mobs
             {
                 _currentState = MobMovementState.Wandering;
                 _isWaiting = false;
-                SetRandomDestination();
+                SetRandomDestination().Forget();
                 
                 if (_debugMode)
                     Debug.Log($"[{gameObject.name}] Immediately returned to wandering");
@@ -223,36 +225,17 @@ namespace Game.Scripts.Mobs
             }
         }
         
-        /// <summary>
-        /// Получить текущий статус движения
-        /// </summary>
         public bool IsMovingToTarget => _currentState == MobMovementState.MovingToTarget;
         public bool IsWandering => _currentState == MobMovementState.Wandering;
         
-        /// <summary>
-        /// Остановить NPC и отменить все действия
-        /// </summary>
         public void StopMoving()
         {
             _navMeshAgent.isStopped = true;
             _isWaiting = false;
         }
         
-        /// <summary>
-        /// Возобновить движение
-        /// </summary>
-        public void ResumeMoving()
-        {
-            _navMeshAgent.isStopped = false;
-        }
-        
-        /// <summary>
-        /// Обновить центр блуждания
-        /// </summary>
-        public void UpdateWanderCenter(Vector3 newCenter)
-        {
-            _startPosition = newCenter;
-        }
+        public void ResumeMoving() => _navMeshAgent.isStopped = false;
+        public void UpdateWanderCenter(Vector3 newCenter) => _startPosition = newCenter;
         
         #endregion
         
@@ -260,17 +243,16 @@ namespace Game.Scripts.Mobs
         
         private void OnDrawGizmosSelected()
         {
-            if (_debugMode)
-            {
-                Gizmos.color = Color.yellow;
-                Vector3 center = Application.isPlaying ? _startPosition : transform.position;
-                Gizmos.DrawWireSphere(center, _walkRadius);
+            if (!_debugMode) return;
+            
+            Gizmos.color = Color.yellow;
+            Vector3 center = Application.isPlaying ? _startPosition : transform.position;
+            Gizmos.DrawWireSphere(center, _walkRadius);
                 
-                if (Application.isPlaying && _currentState == MobMovementState.MovingToTarget)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawWireSphere(_targetDestination, 0.5f);
-                }
+            if (Application.isPlaying && _currentState == MobMovementState.MovingToTarget)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(_targetDestination, 0.5f);
             }
         }
         
