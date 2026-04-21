@@ -36,7 +36,7 @@ namespace Game.Scripts.Player
             CreateMousePrefab();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!_createdMouse)
                 return;

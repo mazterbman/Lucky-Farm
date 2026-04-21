@@ -14,7 +14,7 @@ namespace Game.Scripts.Player
             transform.position = worldPosition;
         }
 
-        public void OnBuilding()
+        public void EnterBuilding()
         {
             if (_state == StateMousePrefab.OnBuilding)
                 return;

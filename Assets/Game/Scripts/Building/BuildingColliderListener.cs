@@ -11,12 +11,12 @@ namespace Game.Scripts.Building
         
         private void OnTriggerEnter(Collider other)
         {
-            OnTriggerEnterAction.Invoke(other);
+            OnTriggerEnterAction?.Invoke(other);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            OnTriggerExitAction.Invoke(other);
+            OnTriggerExitAction?.Invoke(other);
         }
     }
 }
