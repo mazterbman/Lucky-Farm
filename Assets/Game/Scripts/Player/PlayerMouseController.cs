@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -11,12 +9,17 @@ namespace Game.Scripts.Player
         [Inject] [SerializeField] private PlayerCameraData _playerCameraData;
 
         [Header("Settings")] 
+        [SerializeField] private GameObject _prefabMouse;
+        [SerializeField] private Vector3 _offsetPrefab = Vector3.zero;
+        
+        [Space]
         [SerializeField] private float _maxRayDistance;
         [SerializeField] private LayerMask _raycastLayers;
 
         [Header("Debug Log")] 
         [SerializeField] [TextArea(5, 10)] private string _debugString;
-        
+
+        private PlayerMousePrefabController _createdMouse;
         private Camera _camera;
         private InputActionReference _pointAction;
         private Vector2 _mousePosition;
@@ -30,13 +33,22 @@ namespace Game.Scripts.Player
         private void Start()
         {
             _pointAction.action.performed += LookPerformed;
+            CreateMousePrefab();
         }
 
         private void Update()
         {
-            if (!TryGetMouseWorldPosition(out var position))
+            if (!_createdMouse)
                 return;
 
+            if (!TryGetMouseWorldPosition(out var position))
+            {
+                _createdMouse.DisableObject();
+                return;
+            }
+            
+            _createdMouse.EnableObject();
+            _createdMouse.SetWorldPosition(position + _offsetPrefab);
             _debugString = position.ToString();
         }
 
@@ -48,6 +60,13 @@ namespace Game.Scripts.Player
         private void LookPerformed(InputAction.CallbackContext ctx)
         {
             _mousePosition = ctx.ReadValue<Vector2>();
+        }
+
+        private void CreateMousePrefab()
+        {
+            if (_createdMouse) return;
+
+            _createdMouse = Instantiate(_prefabMouse).GetComponent<PlayerMousePrefabController>();
         }
         
         private bool TryGetMouseWorldPosition(out Vector3 position)
