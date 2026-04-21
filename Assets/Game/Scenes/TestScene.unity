@@ -166,6 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c54be83783fea74bb571954b8d13403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Grass.GrassManager
+  _minDistanceToSpawn: 1.5
+  _cellSize: 2
   _controllers: []
 --- !u!1 &275042317
 GameObject:

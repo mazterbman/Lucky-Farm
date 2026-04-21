@@ -48,11 +48,11 @@ namespace Game.Scripts.Player
         
         public void EnterGrass()
         {
-            if (_state is StateMousePrefab.OnGrass or StateMousePrefab.OnBuilding )
+            if (_state is StateMousePrefab.OnGrassSpace or StateMousePrefab.OnBuilding )
                 return;
             
             _holderObj.SetActive(true);
-            _state = StateMousePrefab.OnGrass;
+            _state = StateMousePrefab.OnGrassSpace;
         }
 
         public void DisableObject()
@@ -68,7 +68,7 @@ namespace Game.Scripts.Player
         {
             switch (_state)
             {
-                case StateMousePrefab.OnGrass:
+                case StateMousePrefab.OnGrassSpace:
                     _grassManager.CreateGrass(transform.position).Forget();
                     break;
                 
@@ -87,7 +87,7 @@ namespace Game.Scripts.Player
     public enum StateMousePrefab
     {
         Disable = 0,
-        OnGrass,
+        OnGrassSpace,
         OnBuilding,
         OnAnimal
     }
