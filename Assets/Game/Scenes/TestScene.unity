@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 225777377}
   - component: {fileID: 225777376}
   - component: {fileID: 225777380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,6 +590,7 @@ GameObject:
   - component: {fileID: 316185331}
   - component: {fileID: 316185332}
   - component: {fileID: 316185333}
+  - component: {fileID: 316185334}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -725,10 +726,34 @@ MonoBehaviour:
     ScrollAction: {fileID: 0}
     RotationActionLeft: {fileID: 0}
     RotationActionRight: {fileID: 0}
+    PointAction: {fileID: 0}
   _scrollSens: 1.5
   _scrollTime: 0.15
-  _rotationSens: 1
   _rotationTime: 0.5
+--- !u!114 &316185334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316185328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9994bbdc61ce5342940735f0ece081e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Player.PlayerMouseController
+  _playerCameraData:
+    SplineDolly: {fileID: 0}
+    Camera: {fileID: 0}
+    ScrollAction: {fileID: 0}
+    RotationActionLeft: {fileID: 0}
+    RotationActionRight: {fileID: 0}
+    PointAction: {fileID: 0}
+  _maxRayDistance: 100
+  _raycastLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  _debugString: 
 --- !u!1 &430894457
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,7 +997,7 @@ GameObject:
   - component: {fileID: 574722333}
   - component: {fileID: 574722332}
   - component: {fileID: 574722331}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1280,6 +1305,7 @@ MonoBehaviour:
     ScrollAction: {fileID: 3188524013404466868, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     RotationActionLeft: {fileID: -3890300258564413785, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     RotationActionRight: {fileID: -1405929057325664271, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    PointAction: {fileID: -4126315414295568503, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &956663633
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1378,7 @@ GameObject:
   - component: {fileID: 1089020603}
   - component: {fileID: 1089020602}
   - component: {fileID: 1089020601}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1475,7 +1501,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1280274734}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TrackingTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1537,7 +1563,7 @@ GameObject:
   - component: {fileID: 1410133774}
   - component: {fileID: 1410133773}
   - component: {fileID: 1410133772}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1739,7 +1765,7 @@ GameObject:
   - component: {fileID: 1740915913}
   - component: {fileID: 1740915912}
   - component: {fileID: 1740915911}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2073,6 +2099,7 @@ MonoBehaviour:
     ScrollAction: {fileID: 0}
     RotationActionLeft: {fileID: 0}
     RotationActionRight: {fileID: 0}
+    PointAction: {fileID: 0}
   _trackMode: 3
   _ignoreVerticalRotation: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
@@ -2186,7 +2213,7 @@ GameObject:
   - component: {fileID: 1885488410}
   - component: {fileID: 1885488409}
   - component: {fileID: 1885488408}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2330,7 +2357,7 @@ GameObject:
   - component: {fileID: 1902824474}
   - component: {fileID: 1902824473}
   - component: {fileID: 1902824472}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2517,7 +2544,7 @@ GameObject:
   - component: {fileID: 2072094546}
   - component: {fileID: 2072094545}
   - component: {fileID: 2072094544}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
