@@ -1,15 +1,18 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
 namespace Game.Scripts.Player
 {
     public class PlayerMouseController : MonoBehaviour
     {
-        [Inject] [SerializeField] private PlayerCameraData _playerCameraData;
-
         [Header("Settings")] 
-        [SerializeField] private GameObject _prefabMouse;
+        [SerializeField] private AssetReferenceGameObject _prefabMouse;
         [SerializeField] private Vector3 _offsetPrefab = Vector3.zero;
         
         [Space]
@@ -19,24 +22,31 @@ namespace Game.Scripts.Player
         [Header("Debug Log")] 
         [SerializeField] [TextArea(5, 10)] private string _debugString;
 
+        [Inject] private DiContainer _container;
+        [Inject] private PlayerCameraData _playerCameraData;
+
+        private CancellationTokenSource _tokenSource;
         private PlayerMousePrefabController _createdMouse;
+        private InputActionReference _clkAction;
         private Camera _camera;
-        private InputActionReference _pointAction;
-        private Vector2 _mousePosition;
 
         private void Awake()
         {
             _camera = _playerCameraData.Camera;
-            _pointAction = _playerCameraData.PointAction;
+            _clkAction = _playerCameraData.ClickAction;
+
+            _clkAction.action.performed += OnClk;
         }
 
         private void Start()
         {
-            _pointAction.action.performed += LookPerformed;
-            CreateMousePrefab();
+            _tokenSource?.Dispose();
+            _tokenSource = new CancellationTokenSource();
+            
+            CreateMousePrefab(_tokenSource.Token).Forget();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (!_createdMouse)
                 return;
@@ -47,26 +57,38 @@ namespace Game.Scripts.Player
                 return;
             }
             
-            _createdMouse.EnableObject();
+            _createdMouse.EnterGrass();
             _createdMouse.SetWorldPosition(position + _offsetPrefab);
             _debugString = position.ToString();
         }
 
         private void OnDestroy()
         {
-            _pointAction.action.performed -= LookPerformed;
+            _tokenSource?.Cancel();
+            _tokenSource?.Dispose();
+            
+            _clkAction.action.performed -= OnClk;
         }
 
-        private void LookPerformed(InputAction.CallbackContext ctx)
+        private async UniTask CreateMousePrefab(CancellationToken token)
         {
-            _mousePosition = ctx.ReadValue<Vector2>();
-        }
-
-        private void CreateMousePrefab()
-        {
-            if (_createdMouse) return;
-
-            _createdMouse = Instantiate(_prefabMouse).GetComponent<PlayerMousePrefabController>();
+            if (_createdMouse != null) return;
+            
+            AsyncOperationHandle<GameObject> operationHandle = _prefabMouse.LoadAssetAsync<GameObject>();
+    
+            try
+            {
+                await operationHandle.Task.AsUniTask();
+                if (_tokenSource.Token.IsCancellationRequested)
+                    return;
+                
+                GameObject instance = _container.InstantiatePrefab(operationHandle.Result);
+                _createdMouse = instance.GetComponent<PlayerMousePrefabController>();
+            }
+            finally
+            {
+                Addressables.Release(operationHandle);
+            }
         }
         
         private bool TryGetMouseWorldPosition(out Vector3 position)
@@ -81,6 +103,13 @@ namespace Game.Scripts.Player
         
             position = Vector3.zero;
             return false;
+        }
+
+        private void OnClk(InputAction.CallbackContext ctx)
+        {
+            if (!_createdMouse) return;
+            
+            _createdMouse.ClkOnObject();
         }
     }
 }

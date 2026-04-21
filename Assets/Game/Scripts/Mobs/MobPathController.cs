@@ -12,9 +12,6 @@ namespace Game.Scripts.Mobs
     {
         [Header("References")] 
         [SerializeField] private NavMeshAgent _navMeshAgent = null;
-
-        [Header("References Injected")]
-        [Inject] [SerializeField] private MobData _mobData;
         
         [Header("Wander Settings")] 
         [SerializeField] private float _walkRadius = 10f;
@@ -23,6 +20,8 @@ namespace Game.Scripts.Mobs
         
         [Header("Debug")] 
         [SerializeField] private bool _debugMode = true;
+        
+        [Inject] private MobData _mobData;
         
         private NavMeshSurface _meshSurface = null;
         private MobMovementState _currentState = MobMovementState.Wandering;

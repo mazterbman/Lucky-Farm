@@ -38,6 +38,11 @@ namespace Game.Scripts.Building
             _tokenSource?.Dispose();
         }
 
+        public void OnClick()
+        {
+            
+        }
+
         private void TriggerEnter(Collider other)
         {
             if (!other.CompareTag(TagMouse)) return;
@@ -74,7 +79,7 @@ namespace Game.Scripts.Building
             await UniTask.Yield(token);
             
             PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
-            controller.EnterBuilding();
+            controller.EnterBuilding(this);
             _lightningHolder.SetActive(true);
         }
         

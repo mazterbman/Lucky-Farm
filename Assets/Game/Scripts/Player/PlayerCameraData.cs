@@ -15,6 +15,6 @@ namespace Game.Scripts.Player
         public InputActionReference ScrollAction = null;
         public InputActionReference RotationActionLeft = null;
         public InputActionReference RotationActionRight = null;
-        public InputActionReference PointAction = null;
+        public InputActionReference ClickAction;
     }
 }
