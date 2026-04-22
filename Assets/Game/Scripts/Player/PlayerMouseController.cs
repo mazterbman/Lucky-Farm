@@ -30,16 +30,13 @@ namespace Game.Scripts.Player
         private InputActionReference _clkAction;
         private Camera _camera;
 
-        private void Awake()
+        private void Start()
         {
             _camera = _playerCameraData.Camera;
             _clkAction = _playerCameraData.ClickAction;
 
             _clkAction.action.performed += OnClk;
-        }
-
-        private void Start()
-        {
+            
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
             
@@ -73,21 +70,25 @@ namespace Game.Scripts.Player
         private async UniTask CreateMousePrefab(CancellationToken token)
         {
             if (_createdMouse != null) return;
-            
-            AsyncOperationHandle<GameObject> operationHandle = _prefabMouse.LoadAssetAsync<GameObject>();
-    
+            var instanceHandle = _prefabMouse.LoadAssetAsync();
+
             try
             {
-                await operationHandle.Task.AsUniTask();
-                if (_tokenSource.Token.IsCancellationRequested)
+                await instanceHandle.Task.AsUniTask();
+                if (token.IsCancellationRequested)
+                {
+                    Addressables.ReleaseInstance(instanceHandle);
                     return;
-                
-                GameObject instance = _container.InstantiatePrefab(operationHandle.Result);
+                }
+
+                GameObject instance = _container.InstantiatePrefab(instanceHandle.Result);
                 _createdMouse = instance.GetComponent<PlayerMousePrefabController>();
             }
-            finally
+            catch (Exception e)
             {
-                Addressables.Release(operationHandle);
+                Debug.LogError($"Failed to instantiate mouse prefab: {e}");
+                if (instanceHandle.IsValid())
+                    Addressables.ReleaseInstance(instanceHandle);
             }
         }
         

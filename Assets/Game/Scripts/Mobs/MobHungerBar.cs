@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Game.Scripts.Mobs
 {
-    public class MobHeathBar:MonoBehaviour
+    public class MobHungerBar:MonoBehaviour
     {
         [SerializeField] private Image _imageBar;
         

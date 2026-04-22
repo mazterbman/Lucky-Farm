@@ -17,8 +17,7 @@ namespace Zenject
         // Any constructor parameters will be filled in with values from the container
         T Instantiate<T>();
         T Instantiate<T>(IEnumerable<object> extraArgs);
-
-        object Instantiate(Type concreteType);
+        
         object Instantiate(Type concreteType, IEnumerable<object> extraArgs);
 
 #if !NOT_UNITY3D

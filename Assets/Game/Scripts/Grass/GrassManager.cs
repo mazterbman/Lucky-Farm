@@ -25,7 +25,7 @@ namespace Game.Scripts.Grass
         private AssetReferenceGameObject _grassPrefab;
         private Dictionary<Vector2Int, HashSet<GrassController>> _grid;
 
-        private void Awake()
+        private void Start()
         {
             _grassPrefab = _grassData.GrassPrefab;
             _grassParent = _grassData.Parent;
@@ -77,10 +77,7 @@ namespace Game.Scripts.Grass
             
             RemoveFromGrid(controller);
             _controllers.Remove(controller);
-            
-            // // Уничтожаем объект
-            // if (controller.gameObject != null)
-            //     Destroy(controller.gameObject);
+            controller.Remove();
         }
          
         private bool CanSpawnAtPosition(Vector3 positionSpawn)
@@ -149,6 +146,133 @@ namespace Game.Scripts.Grass
             _controllers.Clear();
             _grid.Clear();
         }
+
+        public async UniTask<GrassController> FindCloserGrass(Vector3 position, CancellationToken token = default)
+        {
+            return _controllers.Count switch
+            {
+                <= 0 => null,
+                < 31 => await FindCloserGrassBruteForce(position, token),
+                _ => await FindCloserGrassWithGrid(position, token)
+            };
+        }
         
+        private async UniTask<GrassController> FindCloserGrassBruteForce(Vector3 position, CancellationToken token)
+        {
+            GrassController closest = null;
+            float minSqrDistance = float.MaxValue;
+        
+            // Разбиваем на чанки для сохранения отзывчивости
+            const int CHUNK_SIZE = 10;
+        
+            for (int i = 0; i < _controllers.Count; i += CHUNK_SIZE)
+            {
+                int end = Mathf.Min(i + CHUNK_SIZE, _controllers.Count);
+            
+                for (int j = i; j < end; j++)
+                {
+                    var grass = _controllers[j];
+                    if (!grass || !grass.IsEmpty) continue;
+                
+                    float sqrDist = (grass.transform.position - position).sqrMagnitude;
+                    if (sqrDist < minSqrDistance)
+                    {
+                        minSqrDistance = sqrDist;
+                        closest = grass;
+                    }
+                }
+            
+                // Yield каждые CHUNK_SIZE объектов
+                if (i + CHUNK_SIZE < _controllers.Count)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+            }
+            
+            return closest;
+        }
+        
+        private async UniTask<GrassController> FindCloserGrassWithGrid(Vector3 position, CancellationToken token = default)
+        {
+            if (_grid.Count == 0)
+                return null;
+
+            Vector2Int centerCell = GetCell(position);
+            GrassController closest = null;
+            float minSqrDistance = float.MaxValue;
+
+            // Проверяем центральную ячейку
+            if (_grid.TryGetValue(centerCell, out HashSet<GrassController> centerGrasses))
+            {
+                foreach (var grass in centerGrasses)
+                {
+                    if (grass == null) continue;
+                    float sqrDist = (grass.transform.position - position).sqrMagnitude;
+                    if (sqrDist < minSqrDistance)
+                    {
+                        minSqrDistance = sqrDist;
+                        closest = grass;
+                    }
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+
+            int ring = 1;
+            // Если объект уже найден, ограничиваем радиус поиска
+            float searchRadius = closest != null ? Mathf.Sqrt(minSqrDistance) : float.MaxValue;
+
+            while (true)
+            {
+                // Если известен радиус поиска и текущее кольцо начинается за его пределами — выходим
+                if (closest != null)
+                {
+                    float minDistanceToRing = (ring - 1) * _cellSize;
+                    if (minDistanceToRing > searchRadius)
+                        break;
+                }
+
+                bool anyCellProcessed = false;
+                for (int dx = -ring; dx <= ring; dx++)
+                {
+                    for (int dy = -ring; dy <= ring; dy++)
+                    {
+                        // Пропускаем внутренние кольца (уже проверены)
+                        if (Mathf.Abs(dx) < ring && Mathf.Abs(dy) < ring)
+                            continue;
+
+                        Vector2Int cell = new Vector2Int(centerCell.x + dx, centerCell.y + dy);
+                        if (_grid.TryGetValue(cell, out HashSet<GrassController> grasses))
+                        {
+                            anyCellProcessed = true;
+                            foreach (var grass in grasses)
+                            {
+                                if (grass == null) continue;
+                                float sqrDist = (grass.transform.position - position).sqrMagnitude;
+                                if (sqrDist < minSqrDistance)
+                                {
+                                    minSqrDistance = sqrDist;
+                                    closest = grass;
+                                    searchRadius = Mathf.Sqrt(minSqrDistance);
+                                }
+                            }
+                        }
+                        await UniTask.Yield(PlayerLoopTiming.Update, token);
+                    }
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+                
+                if (!anyCellProcessed && closest != null)
+                    break;
+
+                ring++;
+                // Защита от бесконечного цикла
+                if (ring > 1000) break;
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+
+            return closest;
+        }
     }
 }

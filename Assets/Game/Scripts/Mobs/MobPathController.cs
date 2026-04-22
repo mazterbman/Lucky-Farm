@@ -32,6 +32,7 @@ namespace Game.Scripts.Mobs
         
         private Vector3 _targetDestination;
         private bool _hasTarget = false;
+        private bool _needReturnWander = false;
         
         private enum MobMovementState
         {
@@ -134,8 +135,11 @@ namespace Game.Scripts.Mobs
             
             _onDestinationReached?.Invoke();
             _onDestinationReached = null;
+
+            if (!_needReturnWander) return;
             
             ReturnToWandering();
+            _needReturnWander = false;
         }
         
         #endregion
@@ -158,14 +162,15 @@ namespace Game.Scripts.Mobs
         #endregion
         
         #region Public API
-        
+
         /// <summary>
         /// Отправить NPC к определенной точке
         /// </summary>
         /// <param name="destination">Точка назначения</param>
         /// <param name="onReached">Колбэк при достижении цели</param>
         /// <param name="interruptWander">Прервать ли текущее блуждание</param>
-        public void MoveToPoint(Vector3 destination, UnityAction onReached = null, bool interruptWander = true)
+        /// <param name="returnToWander"></param>
+        public void MoveToPoint(Vector3 destination, UnityAction onReached = null, bool interruptWander = true, bool returnToWander = true)
         {
             // Проверяем, находится ли точка на NavMesh
             if (!NavMesh.SamplePosition(destination, out NavMeshHit hit, 5f, NavMesh.AllAreas))
@@ -182,6 +187,7 @@ namespace Game.Scripts.Mobs
             if (!interruptWander) return;
             
             _isWaiting = false;
+            _needReturnWander = returnToWander;
             _currentState = MobMovementState.MovingToTarget;
             _navMeshAgent.SetDestination(_targetDestination);
                 
@@ -195,7 +201,7 @@ namespace Game.Scripts.Mobs
         /// <summary>
         /// Отправить NPC к определенному трансформу
         /// </summary>
-        public void MoveToTransform(Transform target, UnityAction onReached = null, bool interruptWander = true)
+        public void MoveToTransform(Transform target, UnityAction onReached = null, bool interruptWander = true, bool returnToWander = true)
         {
             if (target == null)
             {
@@ -203,7 +209,7 @@ namespace Game.Scripts.Mobs
                 return;
             }
             
-            MoveToPoint(target.position, onReached, interruptWander);
+            MoveToPoint(target.position, onReached, interruptWander, returnToWander);
         }
         
         /// <summary>

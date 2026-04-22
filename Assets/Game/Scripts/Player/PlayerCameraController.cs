@@ -35,7 +35,7 @@ namespace Game.Scripts.Player
             Right,
         }
         
-        private void Awake()
+        private void Start()
         {
             _scrollTokenSource?.Dispose();
             _scrollTokenSource = new CancellationTokenSource();

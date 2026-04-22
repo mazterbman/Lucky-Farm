@@ -9,14 +9,14 @@ namespace Game.Scripts.Player
     {
         [Header("References")] 
         [SerializeField] private GameObject _holderObj;
-
+        
         [Inject] private GrassData _grassData;
         
         private GrassManager _grassManager;
         private BuildingController _currentBuildingController;
         private StateMousePrefab _state = StateMousePrefab.Disable;
 
-        private void Awake()
+        private void Start()
         {
             _grassManager = _grassData.Manager;
         }
