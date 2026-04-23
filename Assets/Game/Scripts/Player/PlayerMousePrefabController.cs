@@ -1,3 +1,4 @@
+using System;
 using Game.Scripts.Building;
 using Game.Scripts.Grass;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace Game.Scripts.Player
 
         public void EnterBuilding(BuildingController controller)
         {
+            Debug.Log($"Enter Building state now = {_state}");
             if (_state == StateMousePrefab.OnBuilding)
                 return;
 
@@ -46,8 +48,9 @@ namespace Game.Scripts.Player
             _state = StateMousePrefab.Disable;
         }
         
-        public void EnterGrass()
+        public void OnGrass()
         {
+            Debug.Log($"Enter Grass state now = {_state}");
             if (_state is StateMousePrefab.OnGrassSpace or StateMousePrefab.OnBuilding )
                 return;
             
@@ -61,6 +64,7 @@ namespace Game.Scripts.Player
                 return;
             
             _holderObj.SetActive(false);
+            transform.position = Vector3.one * -10;
             _state = StateMousePrefab.Disable;
         }
 

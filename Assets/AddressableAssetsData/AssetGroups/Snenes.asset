@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Snenes
   m_GUID: 7d542dab44a516c4ab03c75448955a21
   m_SerializeEntries:
-  - m_GUID: 918cae0ab5a39aa448ea3218eb19230b
-    m_Address: Game/Scenes/TestScene/NavMesh-Model_NavMesh.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e86179a36a5c49e489cbe83666168c8f
     m_Address: Game/Scenes/TestScene.unity
     m_ReadOnly: 0

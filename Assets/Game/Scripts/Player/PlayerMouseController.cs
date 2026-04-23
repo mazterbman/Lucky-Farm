@@ -54,7 +54,6 @@ namespace Game.Scripts.Player
                 return;
             }
             
-            _createdMouse.EnterGrass();
             _createdMouse.SetWorldPosition(position + _offsetPrefab);
             _debugString = position.ToString();
         }

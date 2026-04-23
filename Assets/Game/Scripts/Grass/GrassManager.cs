@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -10,6 +11,9 @@ namespace Game.Scripts.Grass
 {
     public class GrassManager : MonoBehaviour
     {
+        [Header("References")] 
+        [SerializeField] private ColliderListener _colliderListener;
+        
         [Header("Settings")] 
         [SerializeField] [Range(0,5)] private float _minDistanceToSpawn;
         [SerializeField] private float _cellSize = 2f;
@@ -19,7 +23,7 @@ namespace Game.Scripts.Grass
 
         [Inject] private DiContainer _container;
         [Inject] private GrassData _grassData;
-
+        
         private CancellationTokenSource _tokenSource;
         private Transform _grassParent;
         private AssetReferenceGameObject _grassPrefab;
@@ -30,6 +34,8 @@ namespace Game.Scripts.Grass
             _grassPrefab = _grassData.GrassPrefab;
             _grassParent = _grassData.Parent;
             _grid = new Dictionary<Vector2Int, HashSet<GrassController>>();
+
+            _colliderListener.OnTriggerStayAction += GrassStay;
             
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
@@ -37,6 +43,8 @@ namespace Game.Scripts.Grass
 
         private void OnDestroy()
         {
+            _colliderListener.OnTriggerStayAction -= GrassStay;
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
         }
@@ -61,9 +69,6 @@ namespace Game.Scripts.Grass
                 _controllers.Add(controller);
                 
                 AddToGrid(controller);
-                
-                // // Подписываемся на событие удаления (если есть)
-                // controller.OnDestroyed += () => RemoveGrass(controller);
             }
             finally
             {
@@ -78,6 +83,15 @@ namespace Game.Scripts.Grass
             RemoveFromGrid(controller);
             _controllers.Remove(controller);
             controller.Remove();
+        }
+
+        private void GrassStay(Collider other)
+        {
+            if (!other.CompareTag(StaticValues.MouseTag))
+                return;
+
+            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
+            controller.OnGrass();
         }
          
         private bool CanSpawnAtPosition(Vector3 positionSpawn)

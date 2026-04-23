@@ -9,11 +9,10 @@ namespace Game.Scripts.Building
     public class BuildingController : MonoBehaviour
     {
         [Header("References")] 
-        [SerializeField] private BuildingColliderListener _colliderListener;
+        [SerializeField] private ColliderListener _colliderListener;
         [SerializeField] private GameObject _lightningHolder;
 
         private CancellationTokenSource _tokenSource;
-        private static readonly string TagMouse = "PlayerMouse";
 
         private void Awake()
         {
@@ -45,7 +44,7 @@ namespace Game.Scripts.Building
 
         private void TriggerEnter(Collider other)
         {
-            if (!other.CompareTag(TagMouse)) return;
+            if (!other.CompareTag(StaticValues.MouseTag)) return;
 
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
@@ -56,7 +55,7 @@ namespace Game.Scripts.Building
 
         private void TriggerExit(Collider other)
         {
-            if (!other.CompareTag(TagMouse)) return;
+            if (!other.CompareTag(StaticValues.MouseTag)) return;
 
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
