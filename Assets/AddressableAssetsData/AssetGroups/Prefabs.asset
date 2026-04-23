@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Prefabs
   m_GUID: 866e929efed32f042bc0706f8c640b55
   m_SerializeEntries:
+  - m_GUID: 010d0431aec4dfc4c9f9f47ce95dcc2b
+    m_Address: Assets/Game/Prefabs/Mobs/Chicken Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16544f9d547067c4dbe98100fce26694
     m_Address: PointMousePref
     m_ReadOnly: 0
@@ -25,8 +30,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75a0d3d652107e647805eab56c18b67f
+    m_Address: Assets/Game/Prefabs/Mobs/Mob.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 797e52352a85e9746baef80c26faed5e
+    m_Address: Assets/Game/Prefabs/Builds/StoreHouse Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a75047eefd0a2245b1170965d67dab7
     m_Address: Cylinder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a8fe520a9cc55249a1fe20a8d8d7810
+    m_Address: Assets/Game/Prefabs/Builds/WaterWell Variant.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

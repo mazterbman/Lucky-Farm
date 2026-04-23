@@ -166,7 +166,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1245084455028811124}
-  - component: {fileID: 1215169019224691145}
   m_Layer: 6
   m_Name: BuildingPref
   m_TagString: Untagged
@@ -182,7 +181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2528636604896725570}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
@@ -191,24 +190,6 @@ Transform:
   - {fileID: 8761628343057707536}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1215169019224691145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2528636604896725570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a49ef9bb3474ef49225c1e73746b461, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.WaterWellController
-  _colliderListener: {fileID: 2296407539599660155}
-  _lightningHolder: {fileID: 895838131297151077}
-  _maxWater: 120
-  _addWaterOnClick: 0.35
-  _coastAddWater: 15
-  _coastRemoveWater: 0.15
 --- !u!1 &9166565951075968681
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +201,7 @@ GameObject:
   - component: {fileID: 1276120927886570136}
   - component: {fileID: 574043065453613292}
   - component: {fileID: 3349727086481268342}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

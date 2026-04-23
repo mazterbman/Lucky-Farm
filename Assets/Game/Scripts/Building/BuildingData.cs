@@ -3,7 +3,7 @@
 namespace Game.Scripts.Building
 {
     [Serializable]
-    public class WaterWellData
+    public class BuildingData
     {
         public WaterWellController WellController;
     }

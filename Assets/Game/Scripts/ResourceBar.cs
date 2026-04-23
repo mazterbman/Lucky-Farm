@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.Mobs
+namespace Game.Scripts
 {
-    public class MobHungerBar:MonoBehaviour
+    public class ResourceBar:MonoBehaviour
     {
         [SerializeField] private Image _imageBar;
         

@@ -9,7 +9,7 @@ namespace Game.Scripts.Mobs
         public UnityAction<MobHungerStatus> OnStatusChange;
         
         [Header("References")] 
-        [SerializeField] private MobHungerBar _hungerBar;
+        [SerializeField] private ResourceBar _hungerBar;
 
         [Header("Settings")] 
         [SerializeField] private float _maxHunger;

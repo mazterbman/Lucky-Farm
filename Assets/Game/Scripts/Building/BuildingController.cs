@@ -30,11 +30,14 @@ namespace Game.Scripts.Building
             _colliderListener.OnTriggerEnterAction -= TriggerEnter;
             _colliderListener.OnTriggerExitAction -= TriggerExit;
             
+            RemoveListeners();
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
         }
 
         public abstract void OnClick();
+        protected abstract void RemoveListeners();
 
         private void TriggerEnter(Collider other)
         {

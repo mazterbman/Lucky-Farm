@@ -24,7 +24,7 @@ namespace Game.Scripts.Grass
 
         [Inject] private DiContainer _container;
         [Inject] private GrassData _grassData;
-        [Inject] private WaterWellData _wellData;
+        [Inject] private BuildingData _wellData;
         
         private CancellationTokenSource _tokenSource;
         private WaterWellController _waterWellController;
