@@ -166,7 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1245084455028811124}
-  - component: {fileID: 5710724061668349541}
+  - component: {fileID: 1215169019224691145}
   m_Layer: 6
   m_Name: BuildingPref
   m_TagString: Untagged
@@ -191,7 +191,7 @@ Transform:
   - {fileID: 8761628343057707536}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5710724061668349541
+--- !u!114 &1215169019224691145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,11 +200,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2528636604896725570}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82edd36c5b690a44786498bc09173297, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a49ef9bb3474ef49225c1e73746b461, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.BuildingController
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.WaterWellController
   _colliderListener: {fileID: 2296407539599660155}
   _lightningHolder: {fileID: 895838131297151077}
+  _maxWater: 120
+  _addWaterOnClick: 0.35
+  _coastAddWater: 15
+  _coastRemoveWater: 0.15
 --- !u!1 &9166565951075968681
 GameObject:
   m_ObjectHideFlags: 0

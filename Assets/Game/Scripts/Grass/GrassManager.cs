@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Building;
 using Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -23,8 +24,10 @@ namespace Game.Scripts.Grass
 
         [Inject] private DiContainer _container;
         [Inject] private GrassData _grassData;
+        [Inject] private WaterWellData _wellData;
         
         private CancellationTokenSource _tokenSource;
+        private WaterWellController _waterWellController;
         private Transform _grassParent;
         private AssetReferenceGameObject _grassPrefab;
         private Dictionary<Vector2Int, HashSet<GrassController>> _grid;
@@ -36,6 +39,8 @@ namespace Game.Scripts.Grass
             _grid = new Dictionary<Vector2Int, HashSet<GrassController>>();
 
             _colliderListener.OnTriggerStayAction += GrassStay;
+
+            _waterWellController = _wellData.WellController;
             
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
@@ -52,6 +57,9 @@ namespace Game.Scripts.Grass
         public async UniTaskVoid CreateGrass(Vector3 worldPosition)
         {
             if (!CanSpawnAtPosition(worldPosition))
+                return;
+            
+            if (!_waterWellController.TryUseWater())
                 return;
             
             AsyncOperationHandle<GameObject> operationHandle = _grassPrefab.LoadAssetAsync<GameObject>();

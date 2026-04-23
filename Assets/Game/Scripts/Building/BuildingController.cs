@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Scripts.Building
 {
-    public class BuildingController : MonoBehaviour
+    public abstract class BuildingController : MonoBehaviour
     {
         [Header("References")] 
         [SerializeField] private ColliderListener _colliderListener;
@@ -19,13 +19,10 @@ namespace Game.Scripts.Building
             _colliderListener.OnTriggerEnterAction += TriggerEnter;
             _colliderListener.OnTriggerExitAction += TriggerExit;
             
+            _lightningHolder.SetActive(false);
+            
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
-        }
-
-        private void Start()
-        {
-            _lightningHolder.SetActive(false);
         }
 
         private void OnDestroy()
@@ -37,10 +34,7 @@ namespace Game.Scripts.Building
             _tokenSource?.Dispose();
         }
 
-        public void OnClick()
-        {
-            
-        }
+        public abstract void OnClick();
 
         private void TriggerEnter(Collider other)
         {
@@ -50,7 +44,7 @@ namespace Game.Scripts.Building
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
 
-            EnterTask(other, _tokenSource.Token).Forget();
+            TriggerTask(other, _tokenSource.Token, true).Forget();
         }
 
         private void TriggerExit(Collider other)
@@ -61,25 +55,25 @@ namespace Game.Scripts.Building
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
 
-            ExitTask(other, _tokenSource.Token).Forget();
+            TriggerTask(other, _tokenSource.Token, false).Forget();
         }
 
-        private async UniTask ExitTask(Collider other, CancellationToken token)
+        private async UniTask TriggerTask(Collider other, CancellationToken token, bool enter)
         {
             await UniTask.Yield(token);
-            
             PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
-            controller.ExitBuilding();
-            _lightningHolder.SetActive(false);
-        }
-        
-        private async UniTask EnterTask(Collider other, CancellationToken token)
-        {
-            await UniTask.Yield(token);
-            
-            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
-            controller.EnterBuilding(this);
-            _lightningHolder.SetActive(true);
+            switch (enter)
+            {
+                case true:
+                    controller.EnterBuilding(this);
+                    _lightningHolder.SetActive(true);
+                    break;
+                
+                case false:
+                    controller.ExitBuilding();
+                    _lightningHolder.SetActive(false);
+                    break;
+            }
         }
         
     }

@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Zenject;
 
 namespace Game.Scripts.Grass
 {
@@ -53,6 +51,5 @@ namespace Game.Scripts.Grass
         public bool IsEmpty { get; set; }
         public Vector2Int CurrentCell { get; set; }
         public void Remove() => Destroy(gameObject);
-
     }
 }
