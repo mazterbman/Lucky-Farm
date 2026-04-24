@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 8923601955312910030}
   - component: {fileID: 7380654557347355356}
   - component: {fileID: 6355381876454995304}
+  - component: {fileID: -3291729964575708926}
   m_Layer: 0
   m_Name: Mob
   m_TagString: Untagged
@@ -437,6 +438,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimatorController
   _animator: {fileID: 594720002764330310}
+--- !u!114 &-3291729964575708926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311019649032070579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b518f6ecee9567458ae1872ee05b980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobItemController
+  _itemForSpawn: {fileID: 0}
+  _timeForSpawn: 500
+  _randomizeTimeForSpawn: 15
 --- !u!1 &8821886174355878128
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,3 +579,7 @@ MonoBehaviour:
   _trackMode: 3
   _ignoreVerticalRotation: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
+  _freezeRotation:
+    X: 0
+    Y: 0
+    Z: 0
