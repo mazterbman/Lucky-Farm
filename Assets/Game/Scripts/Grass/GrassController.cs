@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Mobs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -48,6 +49,7 @@ namespace Game.Scripts.Grass
             }
         }
 
+        public MobController CurrentMobController { get; set; }
         public bool IsEmpty { get; set; }
         public Vector2Int CurrentCell { get; set; }
         public void Remove() => Destroy(gameObject);

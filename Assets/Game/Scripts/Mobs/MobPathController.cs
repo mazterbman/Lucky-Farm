@@ -123,7 +123,7 @@ namespace Game.Scripts.Mobs
         
         private void UpdateMovingToTarget()
         {
-            if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
             {
                 OnTargetReached();
             }

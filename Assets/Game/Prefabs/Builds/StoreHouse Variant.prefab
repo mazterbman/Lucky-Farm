@@ -55,5 +55,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2528636604896725570, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4469928503510839421}
   m_SourcePrefab: {fileID: 100100000, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
+--- !u!1 &389412826698662192 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2528636604896725570, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
+  m_PrefabInstance: {fileID: 2769992494324222834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4469928503510839421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389412826698662192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc675ab5a614556b92721ec87e4619b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.StoreHouseController
+  _colliderListener: {fileID: 4156407952391823113}
+  _lightningHolder: {fileID: 3034957172351361815}
+  _maxItems: 100
+  _storeItems: []
+--- !u!1 &3034957172351361815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 895838131297151077, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
+  m_PrefabInstance: {fileID: 2769992494324222834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4156407952391823113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2296407539599660155, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
+  m_PrefabInstance: {fileID: 2769992494324222834}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22c8268747b68b48a846f92a63981c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.BuildingColliderListener

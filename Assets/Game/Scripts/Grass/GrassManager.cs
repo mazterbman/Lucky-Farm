@@ -174,7 +174,7 @@ namespace Game.Scripts.Grass
             return _controllers.Count switch
             {
                 <= 0 => null,
-                < 31 => await FindCloserGrassBruteForce(position, token),
+                < 51 => await FindCloserGrassBruteForce(position, token),
                 _ => await FindCloserGrassWithGrid(position, token)
             };
         }

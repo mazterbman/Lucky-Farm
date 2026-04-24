@@ -1,6 +1,8 @@
 ﻿using System;
+using Game.Scripts.Economy;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Game.Scripts.Building
 {
@@ -15,11 +17,16 @@ namespace Game.Scripts.Building
         [SerializeField] private int _coastAddWater = 15;
         [SerializeField] [Range(0, 1)] private float _coastRemoveWater = 0.15f;
 
+        [Inject] private EconomyData _economyData;
+
+        private BalanceLevelManager _balanceLevelManager;
         private float _currentWater;
         private UnityAction<float> _onEditWaterLevel;
 
         private void Start()
         {
+            _balanceLevelManager = _economyData.BalanceLevelManager;
+            
             _currentWater = _maxWater;
             _resourceBar.ResetBar();
             _onEditWaterLevel += ChangeWaterLevel;
@@ -27,8 +34,10 @@ namespace Game.Scripts.Building
 
         public override void OnClick()
         {
-            //ToDo make Check balance 
             if (CurrentPercentWater >= 1)
+                return;
+            
+            if (!_balanceLevelManager.TryRemove(_coastAddWater))
                 return;
             
             AddWater();

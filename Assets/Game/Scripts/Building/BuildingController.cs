@@ -1,12 +1,13 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Interfaces;
 using Game.Scripts.Player;
 using UnityEngine;
 
 namespace Game.Scripts.Building
 {
-    public abstract class BuildingController : MonoBehaviour
+    public abstract class BuildingController : MonoBehaviour, IClickObj
     {
         [Header("References")] 
         [SerializeField] private ColliderListener _colliderListener;
@@ -73,7 +74,7 @@ namespace Game.Scripts.Building
                     break;
                 
                 case false:
-                    controller.ExitBuilding();
+                    controller.DisableObject();
                     _lightningHolder.SetActive(false);
                     break;
             }

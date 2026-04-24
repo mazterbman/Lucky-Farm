@@ -24,6 +24,7 @@ namespace Game.Scripts.Mobs
 
         private MobHungerStatus _hungerStatus;
         private float _currentHunger = 0;
+        private float _currentPercentFactor;
 
         private void Start()
         {
@@ -31,8 +32,7 @@ namespace Game.Scripts.Mobs
             _hungerStatus = MobHungerStatus.Normal;
             _currentHunger = _maxHunger;
 
-            float randomFactor = Random.Range(0, _randomHungerFactor);
-            _percentHunger += Random.Range(0, 2) == 0 ? -randomFactor : randomFactor;
+            RandomiseHunger();
         }
 
         private void Update()
@@ -45,8 +45,8 @@ namespace Game.Scripts.Mobs
             _currentHunger = Mathf.Clamp(_currentHunger -_damagePerSec * Time.deltaTime, 0, _maxHunger);
             _hungerBar.UpdateBar(PercentCurrentHunger);
 
-            _debugString = $"Current Health = {_currentHunger}";
-            _debugString += $"\nPercent Health = {PercentCurrentHunger}";
+            _debugString = $"Current Hunger = {_currentHunger}";
+            _debugString += $"\nPercent Hunger = {PercentCurrentHunger}";
             
             if (PercentCurrentHunger <= 0)
             {
@@ -54,7 +54,7 @@ namespace Game.Scripts.Mobs
                 return;
             }
             
-            if (PercentCurrentHunger < _percentHunger)
+            if (PercentCurrentHunger < _currentPercentFactor)
             {
                 ChangeStatus(MobHungerStatus.Hungry);
                 return;
@@ -68,8 +68,19 @@ namespace Game.Scripts.Mobs
             if (newStatus == _hungerStatus)
                 return;
 
+            if (newStatus == MobHungerStatus.Normal)
+            {
+                RandomiseHunger();
+            }
+            
             _hungerStatus = newStatus;
             OnStatusChange?.Invoke(newStatus);
+        }
+        
+        private void RandomiseHunger()
+        {
+            float randomFactor = Random.Range(0, _randomHungerFactor);
+            _currentPercentFactor = _percentHunger + (Random.Range(0, 2) == 0 ? -randomFactor : randomFactor);
         }
 
 

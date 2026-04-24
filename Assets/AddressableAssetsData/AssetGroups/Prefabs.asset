@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 070f57687f00bdd4e94c65b279e898d9
+    m_Address: Assets/Game/Prefabs/Items/Egg Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16544f9d547067c4dbe98100fce26694
     m_Address: PointMousePref
     m_ReadOnly: 0
@@ -47,6 +52,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a8fe520a9cc55249a1fe20a8d8d7810
     m_Address: Assets/Game/Prefabs/Builds/WaterWell Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c50a7ac087989e644a20668c8d346c5d
+    m_Address: Assets/Game/Prefabs/Items/ItemHolder.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

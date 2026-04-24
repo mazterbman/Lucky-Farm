@@ -14,7 +14,7 @@ namespace Game.Scripts.Mobs
         [SerializeField] private MobAnimatorController _animatorController;
 
         [Inject] private GrassData _grassData;
-
+        
         private GrassController _currentGrassController;
         private GrassManager _grassManager;
         private CancellationTokenSource _tokenSource;
@@ -33,6 +33,7 @@ namespace Game.Scripts.Mobs
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
             
+            if (_currentGrassController) _currentGrassController.IsEmpty = true;
             _hungerSystem.OnStatusChange -= MobStatusChange;
         }
 
@@ -57,6 +58,9 @@ namespace Game.Scripts.Mobs
         {
             //ToDo
             //Make Animation Dead
+            
+            _tokenSource?.Cancel();
+            _tokenSource?.Dispose();
             
             if (_currentGrassController) _currentGrassController.IsEmpty = true;
             Destroy(gameObject);
@@ -98,6 +102,7 @@ namespace Game.Scripts.Mobs
                 return;
 
             _currentGrassController.IsEmpty = false;
+            _currentGrassController.CurrentMobController = this;
             _pathController.MoveToTransform(_currentGrassController.transform, () => ReachedFood().Forget(), returnToWander: false);
         }
         

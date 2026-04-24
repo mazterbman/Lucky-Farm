@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.Economy;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Game.Scripts.Building
 {
@@ -14,10 +16,14 @@ namespace Game.Scripts.Building
         [Header("References")]
         [SerializeField] private List<StoreItem> _storeItems;
 
+        [Inject] private EconomyData _economyData;
+        
+        private BalanceLevelManager _balanceLevelManager;
         private UnityAction _onUpdateItems;
 
         private void Start()
         {
+            _balanceLevelManager = _economyData.BalanceLevelManager;
             _onUpdateItems += UpdateStore;
         }
 
@@ -29,19 +35,19 @@ namespace Game.Scripts.Building
         [ContextMenu("Add Egg")]
         private void AddEgg()
         {
-            AddItem(new StoreItem(StoreItem.TypeItem.Egg, 1, "Egg"));
+            TryAddItem(new StoreItem().CreateEgg());
         }
 
-        [ContextMenu("Remove Egg")]
-        private void RemoveEgg()
+        [ContextMenu("Sell Egg")]
+        private void SellEgg()
         {
-            RemoveItem(new StoreItem(StoreItem.TypeItem.Egg, 1, "Egg"));
+            TrySellItem(new StoreItem().CreateEgg());
         }
 
-        public void AddItem(StoreItem item)
+        public bool TryAddItem(StoreItem item)
         {
             if (item == null)
-                return;
+                return false;
             
             if (_storeItems.All(storeItem => storeItem.Type != item.Type))
             {
@@ -54,23 +60,35 @@ namespace Game.Scripts.Building
             }
             
             _onUpdateItems?.Invoke();
+            return true;
         }
 
-        public void RemoveItem(StoreItem item)
+        public bool TryRemoveItem(StoreItem item)
         {
             if (item == null)
-                return;
+                return false;
             
             if (_storeItems.All(storeItem => storeItem.Type != item.Type)) 
-                return;
+                return false;
             
             StoreItem storeItem = _storeItems.Find(arg1 => arg1.Type == item.Type);
             if (storeItem.Count < item.Count)
-                return;
+                return false;
             
             storeItem.Count -= item.Count;
             _onUpdateItems?.Invoke();
+            return true;
         }
+
+        public bool TrySellItem(StoreItem item)
+        {
+            if (!TryRemoveItem(item))
+                return false;
+
+            _balanceLevelManager.TryAdd(item.Coast * item.Count);
+            return true;
+        }
+        
         
 
         protected override void RemoveListeners()
@@ -98,15 +116,27 @@ namespace Game.Scripts.Building
     [Serializable]
     public class StoreItem
     {
-        public TypeItem Type;
-        public int Count;
-        public string Name;
+        public TypeItem Type { get; set; }
+        public int Count { get; set; }
+        public int Coast { get; private set; }
+        public string Name { get; private set; }
 
-        public StoreItem(TypeItem type, int count, string name)
+        public StoreItem(TypeItem type, int count)
         {
             Type = type;
             Count = count;
-            Name = name;
+        }
+        
+        public StoreItem() { }
+
+        public StoreItem CreateEgg()
+        {
+            Type = TypeItem.Egg;
+            Count = 1;
+            Name = "Egg";
+            Coast = 15;
+            
+            return this;
         }
 
         public enum TypeItem

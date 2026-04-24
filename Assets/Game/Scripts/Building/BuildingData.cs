@@ -6,5 +6,6 @@ namespace Game.Scripts.Building
     public class BuildingData
     {
         public WaterWellController WellController;
+        public StoreHouseController StoreHouseController;
     }
 }

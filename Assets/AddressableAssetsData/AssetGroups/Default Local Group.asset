@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: 50556f7523345ac4893fea2a7d13e8a1
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 94d2de6d40cc9b74b8b20f6300cd7385
+    m_Address: Assets/Game/Prefabs/GUI/SellHouseCanvas/ContentStoreItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1bcb68ca9535f4a4aa607e9cc222b6a7, type: 2}
   m_SchemaSet:

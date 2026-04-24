@@ -1,6 +1,7 @@
 using System;
 using Game.Scripts.Building;
 using Game.Scripts.Grass;
+using Game.Scripts.Mobs;
 using UnityEngine;
 using Zenject;
 
@@ -14,7 +15,8 @@ namespace Game.Scripts.Player
         [Inject] private GrassData _grassData;
         
         private GrassManager _grassManager;
-        private BuildingController _currentBuildingController;
+        private BuildingController _buildingController;
+        private MobItemController _mobItemController;
         private StateMousePrefab _state = StateMousePrefab.Disable;
 
         private void Start()
@@ -32,24 +34,24 @@ namespace Game.Scripts.Player
             if (_state == StateMousePrefab.OnBuilding)
                 return;
 
-            _currentBuildingController = controller;
+            _buildingController = controller;
             _holderObj.SetActive(false);
             _state = StateMousePrefab.OnBuilding;
         }
 
-        public void ExitBuilding()
+        public void EnterItem(MobItemController controller)
         {
-            if (_state != StateMousePrefab.OnBuilding)
+            if (_state == StateMousePrefab.OnItem)
                 return;
 
-            _currentBuildingController = null;
+            _mobItemController = controller;
             _holderObj.SetActive(false);
-            _state = StateMousePrefab.Disable;
+            _state = StateMousePrefab.OnItem;
         }
         
         public void OnGrass()
         {
-            if (_state is StateMousePrefab.OnGrassSpace or StateMousePrefab.OnBuilding )
+            if (_state != StateMousePrefab.Disable)
                 return;
             
             _holderObj.SetActive(true);
@@ -62,6 +64,8 @@ namespace Game.Scripts.Player
                 return;
             
             _holderObj.SetActive(false);
+            _mobItemController = null;
+            _buildingController = null;
             transform.position = Vector3.one * -10;
             _state = StateMousePrefab.Disable;
         }
@@ -75,10 +79,15 @@ namespace Game.Scripts.Player
                     break;
                 
                 case StateMousePrefab.OnBuilding:
-                    _currentBuildingController.OnClick();
+                    _buildingController.OnClick();
                     break;
                 
                 case StateMousePrefab.OnAnimal:
+                    break;
+                
+                case StateMousePrefab.OnItem:
+                    _mobItemController.OnClick();
+                    DisableObject();
                     break;
                 
                 default: break;
@@ -91,6 +100,7 @@ namespace Game.Scripts.Player
         Disable = 0,
         OnGrassSpace,
         OnBuilding,
-        OnAnimal
+        OnAnimal,
+        OnItem
     }
 }

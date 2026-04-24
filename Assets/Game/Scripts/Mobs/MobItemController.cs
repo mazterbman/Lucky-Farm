@@ -1,62 +1,72 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using System;
+using Game.Scripts.Building;
+using Game.Scripts.Interfaces;
+using Game.Scripts.Player;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Zenject;
 
 namespace Game.Scripts.Mobs
 {
-    public class MobItemController : MonoBehaviour
+    public class MobItemController : MonoBehaviour, IClickObj
     {
-        [Header("References")] 
-        [SerializeField] private GameObject _itemForSpawn;
+        [Header("References")]
+        [SerializeField] private ColliderListener _colliderListener;
+        [SerializeField] private GameObject _lightingHolder;
+        
+        [Header("Settings")] 
+        [SerializeField] private StoreItem.TypeItem _itemType = StoreItem.TypeItem.Egg;
 
-        [Header("Settings")]
-        [SerializeField] [Range(0, 600)] private float _timeForSpawn = 500;
-        [SerializeField] [Range(0, 30)] private float _randomizeTimeForSpawn = 15;
+        private StoreItem _item;
+        [Inject] private BuildingData _buildingData;
 
-        private CancellationTokenSource _tokenSource;
-        private float _currentTime;
-
-        private void Start()
+        private void Awake()
         {
-            _currentTime = ApplyRandomizeTime();
-            _tokenSource?.Dispose();
-            _tokenSource = new CancellationTokenSource();
+            _colliderListener.OnTriggerEnterAction += TriggerEnter;
+            _colliderListener.OnTriggerExitAction += TriggerExit;
             
-            SpawnAsync(_tokenSource.Token).Forget();
+            _lightingHolder.SetActive(false);
+
+            switch (_itemType)
+            {
+                case StoreItem.TypeItem.Egg:
+                    _item = new StoreItem().CreateEgg();
+                    break;
+            }
         }
 
         private void OnDestroy()
         {
-            _tokenSource?.Cancel();
-            _tokenSource?.Dispose();
+            _colliderListener.OnTriggerEnterAction -= TriggerEnter;
+            _colliderListener.OnTriggerExitAction -= TriggerExit;
         }
 
-        private async UniTask SpawnAsync(CancellationToken token)
+        private void TriggerExit(Collider other)
         {
-            float time = 0;
-            while (time < _currentTime && token.IsCancellationRequested)
-            {
-                time += Time.deltaTime;
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
-            }
-            
-            if(token.IsCancellationRequested)
+            if (!other.CompareTag(StaticValues.MouseTag))
+                return;
+
+            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
+            controller.DisableObject();
+            _lightingHolder.SetActive(false);
+        }
+
+        private void TriggerEnter(Collider other)
+        {
+            if (!other.CompareTag(StaticValues.MouseTag))
                 return;
             
-            SpawnItem();
+            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
+            controller.EnterItem(this);
+            _lightingHolder.SetActive(true);
         }
 
-        private float ApplyRandomizeTime()
+        public void OnClick()
         {
-            var rand = Random.Range(0,2) == 0 ? Random.Range(0, _randomizeTimeForSpawn) : Random.Range(-_randomizeTimeForSpawn, 0);
-            return rand + _timeForSpawn;
-        }
-
-        private void SpawnItem()
-        {
+            _buildingData.StoreHouseController.TryAddItem(_item);
             
+            //TODO
+            // Made effect or animate for collect Item
+            Destroy(gameObject);
         }
-        
     }
 }
