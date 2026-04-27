@@ -1,5 +1,6 @@
 ﻿using System;
 using Game.Scripts.Building;
+using Game.Scripts.Building.StoreHouse;
 using Game.Scripts.Interfaces;
 using Game.Scripts.Player;
 using UnityEngine;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Scripts.Building.StoreHouse;
 
 namespace Game.Scripts.Building
 {
@@ -7,5 +8,6 @@ namespace Game.Scripts.Building
     {
         public WaterWellController WellController;
         public StoreHouseController StoreHouseController;
+        public StoreHouseUiController StoreHouseUiController;
     }
 }

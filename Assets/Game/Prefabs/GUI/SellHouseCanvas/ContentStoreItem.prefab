@@ -602,6 +602,7 @@ GameObject:
   - component: {fileID: 7173185786348312546}
   - component: {fileID: 2314765201843074310}
   - component: {fileID: 6626184585797984349}
+  - component: {fileID: 2211627799923938581}
   m_Layer: 5
   m_Name: ContentStoreItem
   m_TagString: Untagged
@@ -696,6 +697,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2211627799923938581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5135313402404706773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01dea3ca908b4a7c91d4818f02a279b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Building.StoreHouse.StoreHouseUiItemController
+  _coastText: {fileID: 7664697058048731281}
+  _countText: {fileID: 5512323607823579128}
+  _singleItemLoad: {fileID: 4353580772657213563}
+  _allItemLoaded: {fileID: 4554563993684033008}
 --- !u!1 &5185874996862955007
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 
-namespace Game.Scripts.Building
+namespace Game.Scripts.Building.StoreHouse
 {
     public class StoreHouseController : BuildingController
     {
@@ -17,13 +17,16 @@ namespace Game.Scripts.Building
         [SerializeField] private List<StoreItem> _storeItems;
 
         [Inject] private EconomyData _economyData;
-        
+        [Inject] private BuildingData _buildingData;
+
+        private StoreHouseUiController _houseUiController;
         private BalanceLevelManager _balanceLevelManager;
         private UnityAction _onUpdateItems;
 
         private void Start()
         {
             _balanceLevelManager = _economyData.BalanceLevelManager;
+            _houseUiController = _buildingData.StoreHouseUiController;
             _onUpdateItems += UpdateStore;
         }
 
@@ -99,6 +102,7 @@ namespace Game.Scripts.Building
         private void OpenMenu()
         {
             UpdateStore();
+            _houseUiController.Show(_storeItems);
         }
         
         private void UpdateStore()
