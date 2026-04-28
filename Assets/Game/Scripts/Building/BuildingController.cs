@@ -14,9 +14,12 @@ namespace Game.Scripts.Building
         [SerializeField] private GameObject _lightningHolder;
 
         private CancellationTokenSource _tokenSource;
+        private int _currentLevel = 1;
 
         private void Awake()
         {
+            LoadSettings(_currentLevel);
+            
             _colliderListener.OnTriggerEnterAction += TriggerEnter;
             _colliderListener.OnTriggerExitAction += TriggerExit;
             
@@ -39,6 +42,7 @@ namespace Game.Scripts.Building
 
         public abstract void OnClick();
         protected abstract void RemoveListeners();
+        protected abstract void LoadSettings(int level);
 
         private void TriggerEnter(Collider other)
         {

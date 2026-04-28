@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Scripts.Economy;
+using Game.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -15,9 +15,11 @@ namespace Game.Scripts.Building.StoreHouse
 
         [Header("References")]
         [SerializeField] private List<StoreItem> _storeItems;
-        
+
+        [Inject] private SettingsLevelData _levelData;
         [Inject] private BuildingData _buildingData;
-        
+
+        private int _currentCountItems = 0;
         private UnityAction _onUpdateItems;
 
         private void Start()
@@ -33,6 +35,9 @@ namespace Game.Scripts.Building.StoreHouse
         public bool TryAddItem(StoreItem item)
         {
             if (item == null)
+                return false;
+
+            if (_currentCountItems + item.Count > _maxItems)
                 return false;
             
             if (_storeItems.All(storeItem => storeItem.Type != item.Type))
@@ -72,6 +77,13 @@ namespace Game.Scripts.Building.StoreHouse
             _onUpdateItems -= UpdateStore;
         }
 
+        protected override void LoadSettings(int level)
+        {
+            int levelIndex = Mathf.Clamp(level - 1, 0, _levelData.StoreHouseSetting.LevelSettingsList.Count - 1);
+            _maxItems = _levelData.StoreHouseSetting.GetMaxItem(_levelData.StoreHouseSetting.LevelSettingsList[levelIndex]);
+            _currentCountItems = 0;
+        }
+
         private void OpenMenu()
         {
             UpdateStore();
@@ -80,9 +92,14 @@ namespace Game.Scripts.Building.StoreHouse
         
         private void UpdateStore()
         {
+            _currentCountItems = 0;
             for (int i = 0; i < _storeItems.Count; i++)
             {
-                if (_storeItems[i].Count > 0) continue;
+                if (_storeItems[i].Count > 0)
+                {
+                    _currentCountItems += _storeItems.Count;
+                    continue;
+                }
                 
                 _storeItems.RemoveAt(i);
                 i--;

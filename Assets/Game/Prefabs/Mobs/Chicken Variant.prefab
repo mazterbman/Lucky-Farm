@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 818376941273669845, guid: 070f57687f00bdd4e94c65b279e898d9, type: 3}
     - target: {fileID: -3291729964575708926, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
       propertyPath: _timeForSpawn
-      value: 60
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: -3291729964575708926, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
       propertyPath: _itemForSpawn.m_AssetGUID

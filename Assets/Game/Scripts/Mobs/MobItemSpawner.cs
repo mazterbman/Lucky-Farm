@@ -20,7 +20,8 @@ namespace Game.Scripts.Mobs
 
         [Header("Debug")] 
         [SerializeField] [TextArea(3, 5)] private string _debugString;
-        
+
+        [Inject] private MobData _mobData;
         [Inject] private DiContainer _container;
 
         private GameObject _loadedItem;
@@ -121,8 +122,7 @@ namespace Game.Scripts.Mobs
 
             try
             {
-                GameObject GO = _container.InstantiatePrefab(_loadedItem, transform.position, Quaternion.identity, transform);
-                GO.transform.parent = null;
+                GameObject GO = _container.InstantiatePrefab(_loadedItem, transform.position, Quaternion.identity, _mobData.ParentItems);
                 GO.transform.position = transform.position;
                 
                 _debugString = "Done Spawn";

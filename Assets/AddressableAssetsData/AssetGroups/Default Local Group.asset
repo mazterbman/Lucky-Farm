@@ -15,6 +15,26 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 50556f7523345ac4893fea2a7d13e8a1
   m_SerializeEntries:
+  - m_GUID: 1e64edc7d7dfb5f4489faa5cdbe6b73c
+    m_Address: Assets/Game/Settings/SettingLevelsStoreHouse.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fab6f40c49839244b14e6882b288485
+    m_Address: Assets/Game/Settings/Installers/SettingsLevelInstaller.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 550cfc07a88446c488de982cbc6717a9
+    m_Address: Assets/Game/Settings/SettingLevelsWaterWell.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9016a43de6f43a745b9da0ecbdd6842c
+    m_Address: Assets/Game/Settings/SettingsLevel.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94d2de6d40cc9b74b8b20f6300cd7385
     m_Address: Assets/Game/Prefabs/GUI/SellHouseCanvas/ContentStoreItem.prefab
     m_ReadOnly: 0

@@ -1,23 +1,24 @@
-﻿using System;
+﻿using Game.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Game.Scripts.Economy
 {
     public class BalanceLevelManager : MonoBehaviour
     {
-        [Header("Settings")] 
-        [SerializeField] [Range(0, 1000)] private int _statBalance = 0;
+        public UnityAction OnUpdateBalance;
+
+        [Inject] private SettingsLevelData _levelData;
         
         [Header("Debug Log")] 
         [SerializeField] [TextArea(3,10)] private string _debugString;
         
-        private float _balance;
-        private UnityAction OnUpdateBalance;
+        private int _balance;
 
         private void Start()
         {
-            _balance = _statBalance;
+            _balance = _levelData.StartBalanceLevel;
             OnUpdateBalance += UpdateBalance;
         }
 
@@ -25,6 +26,8 @@ namespace Game.Scripts.Economy
         {
             OnUpdateBalance -= UpdateBalance;
         }
+
+        public int Balance => _balance;
 
         public bool TryAdd(int money)
         {
