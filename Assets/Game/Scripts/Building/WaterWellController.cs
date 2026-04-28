@@ -18,15 +18,12 @@ namespace Game.Scripts.Building
         [SerializeField] [Range(0, 1)] private float _coastRemoveWater = 0.15f;
 
         [Inject] private EconomyData _economyData;
-
-        private BalanceLevelManager _balanceLevelManager;
+        
         private float _currentWater;
         private UnityAction<float> _onEditWaterLevel;
 
         private void Start()
         {
-            _balanceLevelManager = _economyData.BalanceLevelManager;
-            
             _currentWater = _maxWater;
             _resourceBar.ResetBar();
             _onEditWaterLevel += ChangeWaterLevel;
@@ -37,7 +34,7 @@ namespace Game.Scripts.Building
             if (CurrentPercentWater >= 1)
                 return;
             
-            if (!_balanceLevelManager.TryRemove(_coastAddWater))
+            if (!_economyData.BalanceLevelManager.TryRemove(_coastAddWater))
                 return;
             
             AddWater();

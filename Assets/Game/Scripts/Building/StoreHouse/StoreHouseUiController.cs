@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Economy;
+using Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Game.Scripts.Building.StoreHouse
@@ -16,6 +20,16 @@ namespace Game.Scripts.Building.StoreHouse
         [SerializeField] private Transform _leftParent;
         [SerializeField] private Transform _rightParent;
 
+        [Space] 
+        [SerializeField] private Button _exitButton;
+        [SerializeField] private InputActionReference _exitReferences;
+
+        [Space] 
+        [SerializeField] private Button _sellItemsButtons;
+
+        [Inject] private EconomyData _economyData;
+        [Inject] private PlayerData _playerData;
+        [Inject] private BuildingData _buildingData;
         [Inject] private DiContainer _diContainer;
 
         private List<StoreHouseUiItemController> _leftGroup = new List<StoreHouseUiItemController>();
@@ -31,69 +45,137 @@ namespace Game.Scripts.Building.StoreHouse
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
             
+            _exitButton.onClick.AddListener(Hide);
+            _exitReferences.action.performed += Hide;
+            
+            _sellItemsButtons.onClick.AddListener(SellItems);
+            
             LoadUiItem(_tokenSource.Token).Forget();
         }
 
         private void OnDestroy()
         {
+            _exitButton.onClick.RemoveListener(Hide);
+            _exitReferences.action.performed -= Hide;
+            _sellItemsButtons.onClick.RemoveListener(SellItems);
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
         }
 
         public void Show(List<StoreItem> items)
         {
-            foreach (var value in _leftGroup)
+            _playerData.PlayerInputController.SwitchToUiMap();
+            gameObject.SetActive(true);
+
+            foreach (var item in items)
             {
-                value.OnUpdateValues?.Invoke();
-            }
-            foreach (var value in _rightGroup)
-            {
-                value.OnUpdateValues?.Invoke();
+                SpawnUiItem(_tokenSource.Token, false, item).Forget();
             }
             
-            gameObject.SetActive(true);
+            UpdateSellButtonStatus();
         }
 
         public void Hide()
         {
+            _playerData.PlayerInputController.SwitchToPlayerMap();
+            ClearItems();
             gameObject.SetActive(false);
         }
-        
-        public void SpawnItemLeft(StoreItem item)
-        {
-            if (ContainsStoreItem(item, ref _leftGroup)) return;
-            SpawnUiItem(_tokenSource.Token, false, item).Forget();
-        }
 
-        public void SpawnItemRight(StoreItem item)
+        public void Hide(InputAction.CallbackContext ctx)
         {
-            if (ContainsStoreItem(item, ref _rightGroup)) return;
-            SpawnUiItem(_tokenSource.Token, true, item).Forget();
+            Hide();
         }
 
         public void ReplaceItem(StoreItem item, bool isRight)
         {
-            if (isRight)
+            var groupFrom = isRight ? ref _rightGroup : ref _leftGroup;
+            var groupTo = isRight ? ref _leftGroup : ref _rightGroup;
+            MoveItem(item, ref groupFrom, ref groupTo, isRight);
+        }
+        
+        public void SellItems()
+        {
+            if (_rightGroup.Count <= 0)
+                return;
+
+            foreach (var item in _rightGroup)
             {
-                SpawnItemRight(item);
+                _economyData.BalanceLevelManager.TryAdd(item.StoreItem.GetAllCoast());
+                _buildingData.StoreHouseController.TryRemoveItem(item.StoreItem);
+            }
+            ClearGroup(_rightGroup);
+        }
+
+
+        private void MoveItem(StoreItem item, ref List<StoreHouseUiItemController> fromGroup, ref List<StoreHouseUiItemController> toGroup, bool isRightTarget)
+        {
+            UpdateCountItem(item, -1 * item.Count, ref fromGroup);
+            if (ContainsStoreItem(item, ref toGroup))
+            {
+                UpdateCountItem(item, item.Count, ref toGroup);
             }
             else
             {
-                SpawnItemLeft(item);
+                SpawnUiItem(_tokenSource.Token, !isRightTarget, item).Forget();
             }
+            
+            UpdateGroup(_leftGroup, _tokenSource.Token).Forget();
+            UpdateGroup(_rightGroup, _tokenSource.Token).Forget();
+        }
+
+        private void UpdateSellButtonStatus()
+        {
+            _sellItemsButtons.interactable = _rightGroup.Count > 0;
         }
         
-        
-        private bool ContainsStoreItem(StoreItem item, ref List<StoreHouseUiItemController> controllers)
+        private void ClearItems()
         {
-            if (controllers.All(arg1 => arg1.StoreItem.Type != item.Type))
+            ClearGroup(_rightGroup);
+            ClearGroup(_leftGroup);
+        }
+
+        private void ClearGroup(List<StoreHouseUiItemController> group)
+        {
+            foreach (var value in group.Where(value => value != null))
+            {
+                Destroy(value.gameObject);
+            }
+            group.Clear();
+        }
+
+        private async UniTask UpdateGroup(List<StoreHouseUiItemController> controllers, CancellationToken token)
+        {
+            await UniTask.WaitForEndOfFrame(token);
+            int count = controllers.Count;
+            for (int i = 0; i < count; i++)
+            {
+                controllers[i].OnUpdateValues?.Invoke();
+                if (controllers[i]) continue;
+                
+                controllers.RemoveAt(i);
+                i--;
+                count--;
+            }
+            
+            UpdateSellButtonStatus();
+        }
+        
+        private bool ContainsStoreItem(StoreItem item, ref List<StoreHouseUiItemController> controllersFind)
+        {
+            if (controllersFind.All(arg1 => arg1.StoreItem.Type != item.Type))
                 return false;
             
             Debug.Log($"Already have this type in Group");
-            var controller = controllers.Find(arg1 => arg1.StoreItem.Type == item.Type);
-            controller.StoreItem.Count += item.Count;
-            controller.OnUpdateValues?.Invoke();
             return true;
+        }
+
+        private void UpdateCountItem(StoreItem item, int count, ref List<StoreHouseUiItemController> controllers)
+        {
+            var controller = controllers.Find(arg1 => arg1.StoreItem.Type == item.Type);
+            controller.StoreItem.Count += count;
+            controller.OnUpdateValues?.Invoke();
         }
 
         private async UniTask SpawnUiItem(CancellationToken token, bool isRight, StoreItem storeItem)
@@ -113,7 +195,7 @@ namespace Game.Scripts.Building.StoreHouse
             Debug.Log($"Was Created Obj = {GO.name} on Parent = {GO.transform.parent.name}");
 
             StoreHouseUiItemController controller = GO.GetComponent<StoreHouseUiItemController>();
-            controller.StoreItem = storeItem;
+            controller.StoreItem = new StoreItem(storeItem);
             controller.IsRightGroup = isRight;
             
             if (isRight) _rightGroup.Add(controller);

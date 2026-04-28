@@ -52,28 +52,29 @@ namespace Game.Scripts.Building.StoreHouse
 
         private void UpdateValues()
         {
+            if (_storeItem.Count <= 0)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             _coastText.text = _storeItem.Coast.ToString("D");
             _countText.text = _storeItem.Count.ToString("D");
         }
 
         private void SingleButtonClk()
         {
-            int countBefore = _storeItem.Count;
-            _storeItem.Count = 1;
-            _houseUiController.ReplaceItem(StoreItem, IsRightGroup);
-            
-            if (countBefore - 1 <= 0)
+            StoreItem item = new StoreItem(_storeItem)
             {
-                Destroy(gameObject);
-                return;
-            }
-            _storeItem.Count = countBefore - 1;
+                Count = 1
+            };
+            _houseUiController.ReplaceItem(item, IsRightGroup);
         }
 
         private void AllButtonClk()
         {
-            _houseUiController.ReplaceItem(StoreItem, IsRightGroup);
-            Destroy(gameObject);
+            StoreItem item = new StoreItem(_storeItem);
+            _houseUiController.ReplaceItem(item, IsRightGroup);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Game.Scripts.Player
     public class PlayerCameraController : MonoBehaviour
     {
         [Header("References Injected")] 
-        [Inject] [SerializeField] private PlayerCameraData _cameraData = null;
+        [Inject] [SerializeField] private PlayerData _data = null;
         
         [Header("Scroll Settings")] 
         [SerializeField] private float _scrollSens = 1f;
@@ -40,12 +40,12 @@ namespace Game.Scripts.Player
             _scrollTokenSource?.Dispose();
             _scrollTokenSource = new CancellationTokenSource();
             
-            _splineDolly = _cameraData.SplineDolly;
-            _scrollAction = _cameraData.ScrollAction;
-            _rotationActionLeft = _cameraData.RotationActionLeft;
-            _rotationActionRight = _cameraData.RotationActionRight;
+            _splineDolly = _data.SplineDolly;
+            _scrollAction = _data.ScrollAction;
+            _rotationActionLeft = _data.RotationActionLeft;
+            _rotationActionRight = _data.RotationActionRight;
             
-            Transform splineTransform = _cameraData.SplineDolly.Spline.transform;
+            Transform splineTransform = _data.SplineDolly.Spline.transform;
             splineTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
             _rotateState = RotateState.None;
             
@@ -124,7 +124,7 @@ namespace Game.Scripts.Player
         
         private async UniTask RotateCamera(bool isRight)
         {
-            Transform splineTransform = _cameraData.SplineDolly.Spline.transform;
+            Transform splineTransform = _data.SplineDolly.Spline.transform;
             float currentAngle = splineTransform.eulerAngles.y;
             currentAngle = Mathf.Round(currentAngle / 90f) * 90f;
             

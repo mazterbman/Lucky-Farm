@@ -14,15 +14,9 @@ namespace Game.Scripts.Player
         
         [Inject] private GrassData _grassData;
         
-        private GrassManager _grassManager;
         private BuildingController _buildingController;
         private MobItemController _mobItemController;
         private StateMousePrefab _state = StateMousePrefab.Disable;
-
-        private void Start()
-        {
-            _grassManager = _grassData.Manager;
-        }
 
         public void SetWorldPosition(Vector3 worldPosition)
         {
@@ -75,7 +69,7 @@ namespace Game.Scripts.Player
             switch (_state)
             {
                 case StateMousePrefab.OnGrassSpace:
-                    _grassManager.CreateGrass(transform.position).Forget();
+                    _grassData.Manager.CreateGrass(transform.position).Forget();
                     break;
                 
                 case StateMousePrefab.OnBuilding:

@@ -23,7 +23,6 @@ namespace Game.Scripts.Mobs
         
         [Inject] private MobData _mobData;
         
-        private NavMeshSurface _meshSurface = null;
         private MobMovementState _currentState = MobMovementState.Wandering;
         private Vector3 _startPosition;
         private bool _isWaiting = false;
@@ -41,14 +40,9 @@ namespace Game.Scripts.Mobs
             ReturningToWander // Возврат к блужданию
         }
 
-        private void Awake()
-        {
-            _meshSurface = _mobData.MeshSurface;
-        }
-
         private void Start()
         {
-            UpdateWanderCenter(_meshSurface.transform.position);
+            UpdateWanderCenter(_mobData.MeshSurface.transform.position);
             SetRandomDestination().Forget();
         }
         

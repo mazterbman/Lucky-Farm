@@ -8,7 +8,7 @@ namespace Game.Scripts.Mobs
     public class TrackPlayerView : MonoBehaviour
     {
         [Header("References Injected")] 
-        [Inject] [SerializeField] private PlayerCameraData _cameraData = null;
+        [Inject] [SerializeField] private PlayerData _data = null;
 
         [Header("Tracking Settings")] 
         [SerializeField] private TrackMode _trackMode = TrackMode.FullLookAt;
@@ -29,7 +29,7 @@ namespace Game.Scripts.Mobs
 
         private void Awake()
         {
-            _camera = _cameraData.Camera;
+            _camera = _data.Camera;
             _initialEulerAngles = transform.eulerAngles;
         }
 

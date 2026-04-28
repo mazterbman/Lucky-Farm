@@ -23,19 +23,14 @@ namespace Game.Scripts.Player
         [SerializeField] [TextArea(5, 10)] private string _debugString;
 
         [Inject] private DiContainer _container;
-        [Inject] private PlayerCameraData _playerCameraData;
+        [Inject] private PlayerData _playerData;
 
         private CancellationTokenSource _tokenSource;
         private PlayerMousePrefabController _createdMouse;
-        private InputActionReference _clkAction;
-        private Camera _camera;
 
         private void Start()
         {
-            _camera = _playerCameraData.Camera;
-            _clkAction = _playerCameraData.ClickAction;
-
-            _clkAction.action.performed += OnClk;
+            _playerData.ClickAction.action.performed += OnClk;
             
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
@@ -63,7 +58,7 @@ namespace Game.Scripts.Player
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
             
-            _clkAction.action.performed -= OnClk;
+            _playerData.ClickAction.action.performed -= OnClk;
         }
 
         private async UniTask CreateMousePrefab(CancellationToken token)
@@ -93,7 +88,7 @@ namespace Game.Scripts.Player
         
         private bool TryGetMouseWorldPosition(out Vector3 position)
         {
-            Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Ray ray = _playerData.Camera.ScreenPointToRay(Mouse.current.position.ReadValue());
         
             if (Physics.Raycast(ray, out RaycastHit hit, _maxRayDistance, _raycastLayers))
             {

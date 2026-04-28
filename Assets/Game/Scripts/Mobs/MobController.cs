@@ -16,7 +16,6 @@ namespace Game.Scripts.Mobs
         [Inject] private GrassData _grassData;
         
         private GrassController _currentGrassController;
-        private GrassManager _grassManager;
         private CancellationTokenSource _tokenSource;
         
         private void Start()
@@ -24,7 +23,6 @@ namespace Game.Scripts.Mobs
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
             
-            _grassManager = _grassData.Manager;
             _hungerSystem.OnStatusChange += MobStatusChange;
         }
 
@@ -75,7 +73,7 @@ namespace Game.Scripts.Mobs
                     return;
 
                 _hungerSystem.EatFood();
-                _grassManager.RemoveGrass(_currentGrassController);
+                _grassData.Manager.RemoveGrass(_currentGrassController);
             }
 
             await UniTask.WaitForEndOfFrame(_tokenSource.Token);
@@ -95,7 +93,7 @@ namespace Game.Scripts.Mobs
             while (!_currentGrassController && !_tokenSource.IsCancellationRequested)
             {
                 await UniTask.WaitForEndOfFrame(_tokenSource.Token);
-                _currentGrassController = await _grassManager.FindCloserGrass(transform.position, _tokenSource.Token);
+                _currentGrassController = await _grassData.Manager.FindCloserGrass(transform.position, _tokenSource.Token);
             }
             
             if (_tokenSource.Token.IsCancellationRequested || !_currentGrassController)

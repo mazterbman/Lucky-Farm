@@ -15,36 +15,19 @@ namespace Game.Scripts.Building.StoreHouse
 
         [Header("References")]
         [SerializeField] private List<StoreItem> _storeItems;
-
-        [Inject] private EconomyData _economyData;
+        
         [Inject] private BuildingData _buildingData;
-
-        private StoreHouseUiController _houseUiController;
-        private BalanceLevelManager _balanceLevelManager;
+        
         private UnityAction _onUpdateItems;
 
         private void Start()
         {
-            _balanceLevelManager = _economyData.BalanceLevelManager;
-            _houseUiController = _buildingData.StoreHouseUiController;
             _onUpdateItems += UpdateStore;
         }
 
         public override void OnClick()
         {
             OpenMenu();
-        }
-
-        [ContextMenu("Add Egg")]
-        private void AddEgg()
-        {
-            TryAddItem(new StoreItem().CreateEgg());
-        }
-
-        [ContextMenu("Sell Egg")]
-        private void SellEgg()
-        {
-            TrySellItem(new StoreItem().CreateEgg());
         }
 
         public bool TryAddItem(StoreItem item)
@@ -65,7 +48,7 @@ namespace Game.Scripts.Building.StoreHouse
             _onUpdateItems?.Invoke();
             return true;
         }
-
+        
         public bool TryRemoveItem(StoreItem item)
         {
             if (item == null)
@@ -82,16 +65,6 @@ namespace Game.Scripts.Building.StoreHouse
             _onUpdateItems?.Invoke();
             return true;
         }
-
-        public bool TrySellItem(StoreItem item)
-        {
-            if (!TryRemoveItem(item))
-                return false;
-
-            _balanceLevelManager.TryAdd(item.Coast * item.Count);
-            return true;
-        }
-        
         
 
         protected override void RemoveListeners()
@@ -102,7 +75,7 @@ namespace Game.Scripts.Building.StoreHouse
         private void OpenMenu()
         {
             UpdateStore();
-            _houseUiController.Show(_storeItems);
+            _buildingData.StoreHouseUiController.Show(_storeItems);
         }
         
         private void UpdateStore()
@@ -125,13 +98,21 @@ namespace Game.Scripts.Building.StoreHouse
         public int Coast { get; private set; }
         public string Name { get; private set; }
 
+        public StoreItem() { }
+        
         public StoreItem(TypeItem type, int count)
         {
             Type = type;
             Count = count;
         }
-        
-        public StoreItem() { }
+
+        public StoreItem(StoreItem item)
+        {
+            Type = item.Type;
+            Coast = item.Coast;
+            Name = item.Name;
+            Count = item.Count;
+        }
 
         public StoreItem CreateEgg()
         {
@@ -141,6 +122,11 @@ namespace Game.Scripts.Building.StoreHouse
             Coast = 15;
             
             return this;
+        }
+
+        public int GetAllCoast()
+        {
+            return Count * Coast;
         }
 
         public enum TypeItem

@@ -6,10 +6,12 @@ using UnityEngine.InputSystem;
 namespace Game.Scripts.Player
 {
     [Serializable]
-    public class PlayerCameraData
+    public class PlayerData
     {
         public CinemachineSplineDolly SplineDolly = null;
         public Camera Camera = null;
+        public PlayerInput PlayerInput;
+        public PlayerInputController PlayerInputController;
         
         [Space]
         public InputActionReference ScrollAction = null;

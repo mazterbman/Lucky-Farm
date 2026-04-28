@@ -6,11 +6,11 @@ namespace Game.Scripts.Installers
 {
     public class PlayerCameraInstaller : MonoInstaller
     {
-        [SerializeField] private PlayerCameraData _cameraData = null;
+        [SerializeField] private PlayerData _data = null;
         
         public override void InstallBindings()
         {
-            Container.Bind<PlayerCameraData>().FromInstance(_cameraData).AsSingle();
+            Container.Bind<PlayerData>().FromInstance(_data).AsSingle();
         }
     }
 }
