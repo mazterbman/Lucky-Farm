@@ -40,13 +40,13 @@ namespace Game.Scripts.Building.StoreHouse
             if (_currentCountItems + item.Count > _maxItems)
                 return false;
             
-            if (_storeItems.All(storeItem => storeItem.Type != item.Type))
+            if (_storeItems.All(storeItem => storeItem.Item.Type != item.Item.Type))
             {
                 _storeItems.Add(item);
             }
             else
             {
-                StoreItem storeItem = _storeItems.Find(arg1 => arg1.Type == item.Type);
+                StoreItem storeItem = _storeItems.Find(arg1 => arg1.Item.Type == item.Item.Type);
                 storeItem.Count += item.Count;
             }
             
@@ -59,10 +59,10 @@ namespace Game.Scripts.Building.StoreHouse
             if (item == null)
                 return false;
             
-            if (_storeItems.All(storeItem => storeItem.Type != item.Type)) 
+            if (_storeItems.All(storeItem => storeItem.Item.Type != item.Item.Type)) 
                 return false;
             
-            StoreItem storeItem = _storeItems.Find(arg1 => arg1.Type == item.Type);
+            StoreItem storeItem = _storeItems.Find(arg1 => arg1.Item.Type == item.Item.Type);
             if (storeItem.Count < item.Count)
                 return false;
             
@@ -104,51 +104,6 @@ namespace Game.Scripts.Building.StoreHouse
                 _storeItems.RemoveAt(i);
                 i--;
             }
-        }
-    }
-
-    [Serializable]
-    public class StoreItem
-    {
-        public TypeItem Type { get; set; }
-        public int Count { get; set; }
-        public int Coast { get; private set; }
-        public string Name { get; private set; }
-
-        public StoreItem() { }
-        
-        public StoreItem(TypeItem type, int count)
-        {
-            Type = type;
-            Count = count;
-        }
-
-        public StoreItem(StoreItem item)
-        {
-            Type = item.Type;
-            Coast = item.Coast;
-            Name = item.Name;
-            Count = item.Count;
-        }
-
-        public StoreItem CreateEgg()
-        {
-            Type = TypeItem.Egg;
-            Count = 1;
-            Name = "Egg";
-            Coast = 15;
-            
-            return this;
-        }
-
-        public int GetAllCoast()
-        {
-            return Count * Coast;
-        }
-
-        public enum TypeItem
-        {
-            Egg = 0
         }
     }
 }

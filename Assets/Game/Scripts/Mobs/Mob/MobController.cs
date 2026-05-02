@@ -4,7 +4,7 @@ using Game.Scripts.Grass;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.Mobs
+namespace Game.Scripts.Mobs.Mob
 {
     public class MobController : MonoBehaviour
     {

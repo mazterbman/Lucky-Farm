@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Game.Scripts.Mobs
+namespace Game.Scripts.Mobs.Mob
 {
     public class MobAnimatorController: MonoBehaviour
     {

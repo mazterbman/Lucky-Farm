@@ -119,6 +119,69 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &30013737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30013738}
+  - component: {fileID: 30013740}
+  - component: {fileID: 30013739}
+  m_Layer: 0
+  m_Name: AnimalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &30013738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30013737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &30013739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30013737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9e355cfd3a17041b97c34da8ee0ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimalSpawner
+  _chickenPrefab:
+    m_AssetGUID: 010d0431aec4dfc4c9f9f47ce95dcc2b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+--- !u!114 &30013740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30013737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b13809ff93e6b9745a03036e54006917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimalManager
 --- !u!1001 &39599629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1073,7 +1136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24fb24f61fc04701bd5b0b5bcfff035e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Economy.BalanceLevelManager
-  _statBalance: 200
   _debugString: 
 --- !u!114 &286027775
 MonoBehaviour:
@@ -2325,6 +2387,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MobInstaller
   _mobData:
     MeshSurface: {fileID: 418501231}
+    MobAnimalSpawner: {fileID: 30013739}
+    MobAnimalManager: {fileID: 30013740}
     ParentItems: {fileID: 1951564101}
     ParentMobs: {fileID: 551975292}
 --- !u!114 &1029256903
@@ -3500,9 +3564,9 @@ Canvas:
   m_GameObject: {fileID: 1530369583}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 308453296}
+  m_PlaneDistance: 5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -3544,17 +3608,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1530369583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc9e355cfd3a17041b97c34da8ee0ac2, type: 3}
+  m_Script: {fileID: 11500000, guid: ebc5da62282a4192b632afc1b2da6056, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimalSpawner
-  _chickenPrefab:
-    m_AssetGUID: 010d0431aec4dfc4c9f9f47ce95dcc2b
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimalSpawnerUI
   _buttonSpawnChicken: {fileID: 162820975}
-  _coastChicken: 100
 --- !u!114 &1572940802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3920,6 +3977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Zenject::Zenject.SceneContext
   _scriptableObjectInstallers:
   - {fileID: 11400000, guid: 1fab6f40c49839244b14e6882b288485, type: 2}
+  - {fileID: 11400000, guid: be5ce4d0810feee4aad5ed67d5365fc2, type: 2}
   _monoInstallers:
   - {fileID: 843982394}
   - {fileID: 956663635}
@@ -4741,5 +4799,6 @@ SceneRoots:
   - {fileID: 438695496}
   - {fileID: 430894459}
   - {fileID: 1314370862}
+  - {fileID: 30013738}
   - {fileID: 280642308}
   - {fileID: 1887183297}

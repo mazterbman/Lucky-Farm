@@ -1,12 +1,12 @@
-﻿using System;
-using Game.Scripts.Building;
+﻿using Game.Scripts.Building;
 using Game.Scripts.Building.StoreHouse;
 using Game.Scripts.Interfaces;
+using Game.Scripts.Items;
 using Game.Scripts.Player;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.Mobs
+namespace Game.Scripts.Mobs.Mob
 {
     public class MobItemController : MonoBehaviour, IClickObj
     {
@@ -15,9 +15,10 @@ namespace Game.Scripts.Mobs
         [SerializeField] private GameObject _lightingHolder;
         
         [Header("Settings")] 
-        [SerializeField] private StoreItem.TypeItem _itemType = StoreItem.TypeItem.Egg;
+        [SerializeField] private Items.TypeItem _itemType = Items.TypeItem.Egg;
 
         private StoreItem _item;
+        [Inject] private ItemsStorage _itemsStorage;
         [Inject] private BuildingData _buildingData;
 
         private void Awake()
@@ -26,12 +27,9 @@ namespace Game.Scripts.Mobs
             _colliderListener.OnTriggerExitAction += TriggerExit;
             
             _lightingHolder.SetActive(false);
-
-            switch (_itemType)
+            if (_itemsStorage.TryGetItem(_itemType, out var item))
             {
-                case StoreItem.TypeItem.Egg:
-                    _item = new StoreItem().CreateEgg();
-                    break;
+                _item = new StoreItem(item, 1);
             }
         }
 

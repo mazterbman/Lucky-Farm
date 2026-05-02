@@ -1,12 +1,10 @@
-using System;
 using Cysharp.Threading.Tasks;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using Zenject;
 
-namespace Game.Scripts.Mobs
+namespace Game.Scripts.Mobs.Mob
 {
     public class MobPathController : MonoBehaviour
     {

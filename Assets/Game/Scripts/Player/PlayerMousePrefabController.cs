@@ -2,6 +2,7 @@ using System;
 using Game.Scripts.Building;
 using Game.Scripts.Grass;
 using Game.Scripts.Mobs;
+using Game.Scripts.Mobs.Mob;
 using UnityEngine;
 using Zenject;
 
@@ -25,7 +26,7 @@ namespace Game.Scripts.Player
 
         public void EnterBuilding(BuildingController controller)
         {
-            if (_state == StateMousePrefab.OnBuilding)
+            if (_state is StateMousePrefab.OnBuilding or StateMousePrefab.OnItem)
                 return;
 
             _buildingController = controller;
@@ -35,7 +36,7 @@ namespace Game.Scripts.Player
 
         public void EnterItem(MobItemController controller)
         {
-            if (_state == StateMousePrefab.OnItem)
+            if (_state is StateMousePrefab.OnItem or StateMousePrefab.OnBuilding)
                 return;
 
             _mobItemController = controller;

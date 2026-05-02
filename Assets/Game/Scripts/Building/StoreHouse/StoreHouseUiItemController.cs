@@ -58,7 +58,7 @@ namespace Game.Scripts.Building.StoreHouse
                 return;
             }
             
-            _coastText.text = _storeItem.Coast.ToString("D");
+            _coastText.text = _storeItem.Item.Coast.ToString("D");
             _countText.text = _storeItem.Count.ToString("D");
         }
 

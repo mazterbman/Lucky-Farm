@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.Economy;
+using Game.Scripts.Mobs;
 using Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -27,6 +28,7 @@ namespace Game.Scripts.Building.StoreHouse
         [Space] 
         [SerializeField] private Button _sellItemsButtons;
 
+        [Inject] private MobData _mobData;
         [Inject] private EconomyData _economyData;
         [Inject] private PlayerData _playerData;
         [Inject] private BuildingData _buildingData;
@@ -102,6 +104,7 @@ namespace Game.Scripts.Building.StoreHouse
 
             foreach (var item in _rightGroup)
             {
+                _mobData.MobAnimalManager.TrySellAnimal(item.StoreItem);
                 _economyData.BalanceLevelManager.TryAdd(item.StoreItem.GetAllCoast());
                 _buildingData.StoreHouseController.TryRemoveItem(item.StoreItem);
             }
@@ -164,7 +167,7 @@ namespace Game.Scripts.Building.StoreHouse
         
         private bool ContainsStoreItem(StoreItem item, ref List<StoreHouseUiItemController> controllersFind)
         {
-            if (controllersFind.All(arg1 => arg1.StoreItem.Type != item.Type))
+            if (controllersFind.All(arg1 => arg1.StoreItem.Item.Type != item.Item.Type))
                 return false;
             
             Debug.Log($"Already have this type in Group");
@@ -173,7 +176,7 @@ namespace Game.Scripts.Building.StoreHouse
 
         private void UpdateCountItem(StoreItem item, int count, ref List<StoreHouseUiItemController> controllers)
         {
-            var controller = controllers.Find(arg1 => arg1.StoreItem.Type == item.Type);
+            var controller = controllers.Find(arg1 => arg1.StoreItem.Item.Type == item.Item.Type);
             controller.StoreItem.Count += count;
             controller.OnUpdateValues?.Invoke();
         }
