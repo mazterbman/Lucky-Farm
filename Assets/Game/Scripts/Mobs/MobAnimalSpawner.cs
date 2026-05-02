@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Scripts.Building;
 using Game.Scripts.Economy;
 using Game.Scripts.Settings;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Game.Scripts.Mobs
         [Space] 
         [SerializeField] private Button _buttonSpawnChicken;
 
+        [Inject] private BuildingData _buildingData;
         [Inject] private SettingsLevelData _levelData;
         [Inject] private MobData _mobData;
         [Inject] private EconomyData _economyData;
@@ -58,6 +60,7 @@ namespace Game.Scripts.Mobs
             
             SpawnAsync(_loadedChicken, _tokenSource.Token).Forget();
             _economyData.BalanceLevelManager.TryRemove(_levelData.ChickenCoast);
+            _buildingData.StoreHouseController.TryAddItem();
         }
 
         private void UpdateButtonsState()
