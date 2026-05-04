@@ -18,6 +18,7 @@ namespace Game.Scripts.Items
     public enum TypeItem
     {
         Egg = 0,
+        Omelet,
         Chicken,
     }
 }

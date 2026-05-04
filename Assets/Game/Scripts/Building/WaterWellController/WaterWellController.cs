@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 
-namespace Game.Scripts.Building
+namespace Game.Scripts.Building.WaterWellController
 {
     public class WaterWellController : BuildingController
     {
         [Header("References")]
-        [SerializeField] private ResourceBar _resourceBar;
+        [SerializeField] private WaterWellUiController _wellUiController;
 
         [Header("Debug")] 
         [SerializeField] private Settings _currentSettings;
@@ -24,7 +24,6 @@ namespace Game.Scripts.Building
         private void Start()
         {
             _currentWater = _currentSettings.Max;
-            _resourceBar.ResetBar();
             _onEditWaterLevel += ChangeWaterLevel;
         }
 
@@ -41,11 +40,11 @@ namespace Game.Scripts.Building
         
         protected override void LoadSettings(int currentLevel)
         {
-            int indexLevel = Mathf.Clamp(currentLevel - 1, 0, _levelData.WaterWellSettings.SettingsList.Count - 1);
-            _currentSettings.Max = _levelData.WaterWellSettings.GetMaxWater(_levelData.WaterWellSettings.SettingsList[indexLevel]);
-            _currentSettings.CoastBuy = _levelData.WaterWellSettings.GetCoastBuyWater(_levelData.WaterWellSettings.SettingsList[indexLevel]);
-            _currentSettings.CoastUse = _levelData.WaterWellSettings.GetCoastUseWater(_levelData.WaterWellSettings.SettingsList[indexLevel]);
-            _currentSettings.AddOnClk = _levelData.WaterWellSettings.GetAddWaterOnClk(_levelData.WaterWellSettings.SettingsList[indexLevel]);
+            int indexLevel = Mathf.Clamp(currentLevel - 1, 0, _levelData.WaterWellSetting.SettingsList.Count - 1);
+            _currentSettings.Max = _levelData.WaterWellSetting.GetMaxWater(_levelData.WaterWellSetting.SettingsList[indexLevel]);
+            _currentSettings.CoastBuy = _levelData.WaterWellSetting.GetCoastBuyWater(_levelData.WaterWellSetting.SettingsList[indexLevel]);
+            _currentSettings.CoastUse = _levelData.WaterWellSetting.GetCoastUseWater(_levelData.WaterWellSetting.SettingsList[indexLevel]);
+            _currentSettings.AddOnClk = _levelData.WaterWellSetting.GetAddWaterOnClk(_levelData.WaterWellSetting.SettingsList[indexLevel]);
         }
 
         protected override void RemoveListeners()
@@ -74,7 +73,7 @@ namespace Game.Scripts.Building
 
         private void ChangeWaterLevel(float value)
         {
-            _resourceBar.UpdateBar(Mathf.Clamp01(value));
+            _wellUiController.UpdateBar(value);
         }
 
         public float CurrentPercentWater => Mathf.Clamp01(_currentWater / _currentSettings.Max);

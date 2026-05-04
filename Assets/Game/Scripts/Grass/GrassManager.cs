@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.Building;
+using Game.Scripts.Building.WaterWellController;
 using Game.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AddressableAssets;

@@ -10,7 +10,8 @@ namespace Game.Scripts.Settings
         [Range(0,10)] public int StartChickenCount = 2;
         
         [Header("Settings")]
-        public SettingLevelsWaterWell WaterWellSettings;
+        public SettingLevelsWaterWell WaterWellSetting;
         public SettingLevelsStoreHouse StoreHouseSetting;
+        public SettingLevelsSweetShop SweetShopSetting;
     }
 }

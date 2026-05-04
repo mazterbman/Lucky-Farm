@@ -6,7 +6,7 @@ namespace Game.Scripts.Building
     [Serializable]
     public class BuildingData
     {
-        public WaterWellController WellController;
+        public WaterWellController.WaterWellController WellController;
         public StoreHouseController StoreHouseController;
         public StoreHouseUiController StoreHouseUiController;
     }

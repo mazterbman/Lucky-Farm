@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Settings.SettingsLevel
   StartBalanceLevel: 200
   StartChickenCount: 2
-  WaterWellSettings: {fileID: 11400000, guid: 550cfc07a88446c488de982cbc6717a9, type: 2}
+  WaterWellSetting: {fileID: 11400000, guid: 550cfc07a88446c488de982cbc6717a9, type: 2}
   StoreHouseSetting: {fileID: 11400000, guid: 1e64edc7d7dfb5f4489faa5cdbe6b73c, type: 2}
+  SweetShopSetting: {fileID: 11400000, guid: b82b6f40bd6439f4ba98f3783f69d539, type: 2}
