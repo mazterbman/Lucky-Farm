@@ -49,13 +49,10 @@ namespace Game.Scripts.Mobs
             _tokenSource?.Dispose();
         }
         
-        public async UniTaskVoid SpawnChicken(bool ignoreBalance = false)
+        public async UniTaskVoid TrySpawnChicken(bool ignoreBalance = false)
         {
-            Debug.Log("Try Chicken Found");
             if (!_itemsStorage.TryGetItem(TypeItem.Chicken, out var item))
                 return;
-            
-            Debug.Log("Info Chicken was Found");
 
             if (!ignoreBalance)
             {
@@ -64,8 +61,6 @@ namespace Game.Scripts.Mobs
                 
                 _economyData.BalanceLevelManager.TryRemove(item.Coast);
             }
-            
-            Debug.Log("Balance was Good");
 
             if (!_isLoaded)
             {

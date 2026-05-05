@@ -42,7 +42,7 @@ namespace Game.Scripts.Mobs
         {
             for (int i = 0; i < _levelData.StartChickenCount; i++)
             {
-                _mobData.MobAnimalSpawner.SpawnChicken(true).Forget();
+                _mobData.MobAnimalSpawner.TrySpawnChicken(true).Forget();
             }
         }
     }

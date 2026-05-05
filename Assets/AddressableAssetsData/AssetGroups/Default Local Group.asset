@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b06cf1d2e799e3e4f8ab7cc62f544f18
+    m_Address: Assets/Game/Settings/SettingLevelsZooShop.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b82b6f40bd6439f4ba98f3783f69d539
     m_Address: Assets/Game/Settings/SettingLevelsSweetShop.asset
     m_ReadOnly: 0

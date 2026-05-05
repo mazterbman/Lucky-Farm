@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75f1ac8de873cfa4bb7da294806e3d69
+    m_Address: Assets/Game/Prefabs/GUI/ZooShop/ZooItemUi.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 797e52352a85e9746baef80c26faed5e
     m_Address: Assets/Game/Prefabs/Builds/StoreHouse Variant.prefab
     m_ReadOnly: 0

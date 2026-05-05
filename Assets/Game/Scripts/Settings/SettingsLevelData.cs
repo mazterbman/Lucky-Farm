@@ -13,5 +13,6 @@ namespace Game.Scripts.Settings
         public SettingLevelsWaterWell WaterWellSetting;
         public SettingLevelsStoreHouse StoreHouseSetting;
         public SettingLevelsSweetShop SweetShopSetting;
+        public SettingLevelsZooShop ZooShopSettings;
     }
 }
