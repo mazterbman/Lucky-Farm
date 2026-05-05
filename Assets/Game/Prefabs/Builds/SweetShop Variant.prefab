@@ -98,22 +98,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 700de779146115e49b68a44f84e5ea41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.TrackPlayerView
-  _data:
-    SplineDolly: {fileID: 0}
-    Camera: {fileID: 0}
-    PlayerInput: {fileID: 0}
-    PlayerInputController: {fileID: 0}
-    ScrollAction: {fileID: 0}
-    RotationActionLeft: {fileID: 0}
-    RotationActionRight: {fileID: 0}
-    ClickAction: {fileID: 0}
   _trackMode: 3
   _ignoreVerticalRotation: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
   _freezeRotation:
-    X: 1
+    UseFreeze: 1
+    X: 0
     Y: 0
     Z: 1
+  _clampRotation:
+    UseClamp: 1
+    ClampRotationX: {x: 0, y: 45}
+    ClampRotationY: {x: -360, y: 360}
+    ClampRotationZ: {x: -360, y: 360}
 --- !u!1 &2502717329191927991
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +300,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1245084455028811124, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.93
+      value: 18.62
       objectReference: {fileID: 0}
     - target: {fileID: 1245084455028811124, guid: 5030c4ba1738e104fb58bd86249f0002, type: 3}
       propertyPath: m_LocalPosition.y
@@ -380,10 +377,10 @@ MonoBehaviour:
   _lightningHolder: {fileID: 2413323944574585466}
   _shopUiController: {fileID: 8261006966804898479}
   _itemIn:
-    Type: 0
+    Item: {fileID: 11400000, guid: 7bfaa505179424441a1da1479505ae53, type: 2}
     Count: 2
   _itemOut:
-    Type: 1
+    Item: {fileID: 11400000, guid: 517f10545d06dd540a9d078d08de815a, type: 2}
     Count: 1
 --- !u!114 &8261006966804898479
 MonoBehaviour:

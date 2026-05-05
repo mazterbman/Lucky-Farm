@@ -18,6 +18,7 @@ namespace Game.Scripts.Mobs.Mob
         [SerializeField] private Items.TypeItem _itemType = Items.TypeItem.Egg;
 
         private StoreItem _item;
+        private PlayerMousePrefabController _mousePrefabController;
         [Inject] private ItemsStorage _itemsStorage;
         [Inject] private BuildingData _buildingData;
 
@@ -37,6 +38,11 @@ namespace Game.Scripts.Mobs.Mob
         {
             _colliderListener.OnTriggerEnterAction -= TriggerEnter;
             _colliderListener.OnTriggerExitAction -= TriggerExit;
+
+            if (_mousePrefabController)
+            {
+                _mousePrefabController.ExitItem(this);
+            }
         }
 
         private void TriggerExit(Collider other)
@@ -44,8 +50,8 @@ namespace Game.Scripts.Mobs.Mob
             if (!other.CompareTag(StaticValues.MouseTag))
                 return;
 
-            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
-            controller.DisableObject();
+            _mousePrefabController ??= other.GetComponent<PlayerMousePrefabController>();
+            _mousePrefabController.ExitItem(this);
             _lightingHolder.SetActive(false);
         }
 
@@ -54,8 +60,8 @@ namespace Game.Scripts.Mobs.Mob
             if (!other.CompareTag(StaticValues.MouseTag))
                 return;
             
-            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
-            controller.EnterItem(this);
+            _mousePrefabController ??= other.GetComponent<PlayerMousePrefabController>();
+            _mousePrefabController.EnterItem(this);
             _lightingHolder.SetActive(true);
         }
 

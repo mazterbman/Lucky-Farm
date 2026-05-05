@@ -7,7 +7,7 @@ namespace Game.Scripts.Settings
     [CreateAssetMenu(fileName = "SettingLevelsSweetShop", menuName = "Scriptable Objects/BuildingsSetting/SettingLevelsSweetShop")]
     public class SettingLevelsSweetShop : ScriptableObject
     {
-        [SerializeField] [Range(0, 3)] private int _standardMaxItems = 1;
+        [SerializeField] [Range(1, 5)] private int _standardMaxItems = 1;
         [SerializeField] [Range(0, 360)] private int _standardTimeWaite = 120;
 
         [Space]

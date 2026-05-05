@@ -13,6 +13,7 @@ namespace Game.Scripts.Building
         [SerializeField] private ColliderListener _colliderListener;
         [SerializeField] private GameObject _lightningHolder;
 
+        private PlayerMousePrefabController _mousePrefabController; 
         private CancellationTokenSource _tokenSource;
         private int _currentLevel = 1;
 
@@ -25,6 +26,9 @@ namespace Game.Scripts.Building
             
             _lightningHolder.SetActive(false);
             
+            DestroyTokenSource?.Dispose();
+            DestroyTokenSource = new CancellationTokenSource();
+            
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
         }
@@ -36,6 +40,9 @@ namespace Game.Scripts.Building
             
             RemoveListeners();
             
+            DestroyTokenSource?.Cancel();
+            DestroyTokenSource?.Dispose();
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
         }
@@ -43,42 +50,46 @@ namespace Game.Scripts.Building
         public abstract void OnClick();
         protected abstract void RemoveListeners();
         protected abstract void LoadSettings(int level);
+        protected CancellationTokenSource DestroyTokenSource;
 
         private void TriggerEnter(Collider other)
         {
             if (!other.CompareTag(StaticValues.MouseTag)) return;
 
+            _mousePrefabController ??= other.GetComponent<PlayerMousePrefabController>();
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
 
-            TriggerTask(other, _tokenSource.Token, true).Forget();
+            TriggerTask(_tokenSource.Token, true).Forget();
         }
 
         private void TriggerExit(Collider other)
         {
             if (!other.CompareTag(StaticValues.MouseTag)) return;
 
+            _mousePrefabController ??= other.GetComponent<PlayerMousePrefabController>();
+            
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
-
-            TriggerTask(other, _tokenSource.Token, false).Forget();
+            
+            TriggerTask(_tokenSource.Token, false).Forget();
         }
 
-        private async UniTask TriggerTask(Collider other, CancellationToken token, bool enter)
+        private async UniTask TriggerTask(CancellationToken token, bool enter)
         {
             await UniTask.Yield(token);
-            PlayerMousePrefabController controller = other.GetComponent<PlayerMousePrefabController>();
             switch (enter)
             {
                 case true:
-                    controller.EnterBuilding(this);
+                    _mousePrefabController.EnterBuilding(this);
                     _lightningHolder.SetActive(true);
                     break;
                 
                 case false:
-                    controller.DisableObject();
+                    _mousePrefabController.DisableObject();
                     _lightningHolder.SetActive(false);
                     break;
             }

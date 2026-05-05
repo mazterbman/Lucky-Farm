@@ -19,7 +19,6 @@ namespace Game.Scripts.Building.StoreHouse
         [SerializeField] private Button _allItemLoaded;
         
         [Inject] private BuildingData _buildingData;
-        private StoreHouseUiController _houseUiController;
         
         private StoreItem _storeItem;
         public StoreItem StoreItem
@@ -36,8 +35,6 @@ namespace Game.Scripts.Building.StoreHouse
         
         private void Awake()
         {
-            _houseUiController = _buildingData.StoreHouseUiController;
-
             _singleItemLoad.onClick.AddListener(SingleButtonClk);
             _allItemLoaded.onClick.AddListener(AllButtonClk);
             OnUpdateValues += UpdateValues;
@@ -68,13 +65,13 @@ namespace Game.Scripts.Building.StoreHouse
             {
                 Count = 1
             };
-            _houseUiController.ReplaceItem(item, IsRightGroup);
+            _buildingData.StoreHouseController.ReplaceItemUi(item, IsRightGroup);
         }
 
         private void AllButtonClk()
         {
             StoreItem item = new StoreItem(_storeItem);
-            _houseUiController.ReplaceItem(item, IsRightGroup);
+            _buildingData.StoreHouseController.ReplaceItemUi(item, IsRightGroup);
         }
     }
 }

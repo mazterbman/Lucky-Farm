@@ -8,6 +8,5 @@ namespace Game.Scripts.Building
     {
         public WaterWellController.WaterWellController WellController;
         public StoreHouseController StoreHouseController;
-        public StoreHouseUiController StoreHouseUiController;
     }
 }

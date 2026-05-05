@@ -106,6 +106,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ScrollClk",
+                    "type": "Button",
+                    "id": "0853f329-ac8c-4ba3-b8e6-7233b678b18d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "RotateLeft",
                     "type": "Button",
                     "id": "951ff07a-7ae3-4067-b0e8-8d4924831b2e",
@@ -573,6 +582,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "RotateRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a2c696c-9468-41ac-a099-11979ebf5d6b",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ScrollClk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

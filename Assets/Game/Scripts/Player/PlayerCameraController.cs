@@ -10,23 +10,20 @@ namespace Game.Scripts.Player
 {
     public class PlayerCameraController : MonoBehaviour
     {
-        [Header("References Injected")] 
-        [Inject] [SerializeField] private PlayerData _data = null;
-        
         [Header("Scroll Settings")] 
         [SerializeField] private float _scrollSens = 1f;
         [SerializeField] [Range(0.1f, 1f)] private float _scrollTime = 0.5f;
         
         [Header("Rotation Settings")] 
         [SerializeField] [Range(0.1f, 1f)] private float _rotationTime = 0.5f;
+        [SerializeField] private RotationSettings _rotationSettings;
 
         private RotateState _rotateState = RotateState.None;
         private CancellationTokenSource _scrollTokenSource = null;
         private CancellationTokenSource _rotationTokenSource = null;
-        private CinemachineSplineDolly _splineDolly = null;
-        private InputActionReference _scrollAction = null;
-        private InputActionReference _rotationActionLeft = null;
-        private InputActionReference _rotationActionRight = null;
+        private CancellationTokenSource _rotationAsyncTokenSource = null;
+        
+        [Inject] private PlayerData _data = null;
         
         private enum RotateState
         {
@@ -40,19 +37,14 @@ namespace Game.Scripts.Player
             _scrollTokenSource?.Dispose();
             _scrollTokenSource = new CancellationTokenSource();
             
-            _splineDolly = _data.SplineDolly;
-            _scrollAction = _data.ScrollAction;
-            _rotationActionLeft = _data.RotationActionLeft;
-            _rotationActionRight = _data.RotationActionRight;
-            
             Transform splineTransform = _data.SplineDolly.Spline.transform;
             splineTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
             _rotateState = RotateState.None;
             
-            _splineDolly.CameraPosition = 0f;
-            _scrollAction.action.performed += ChangeSplinePosition;
-            _rotationActionLeft.action.performed += RotateCameraLeft;
-            _rotationActionRight.action.performed += RotateCameraRight;
+            _data.SplineDolly.CameraPosition = 0f;
+            _data.ScrollAction.action.performed += ChangeSplinePosition;
+            _data.RotationAction.action.started += RotatePressed;
+            _data.RotationAction.action.canceled += RotationCanceled;
         }
 
         private void OnDestroy()
@@ -63,11 +55,14 @@ namespace Game.Scripts.Player
             _rotationTokenSource?.Cancel();
             _rotationTokenSource?.Dispose();
             
+            _rotationAsyncTokenSource?.Cancel();
+            _rotationAsyncTokenSource?.Dispose();
+            
             _rotateState = RotateState.None;
             
-            _scrollAction.action.performed -= ChangeSplinePosition;
-            _rotationActionLeft.action.performed -= RotateCameraLeft;
-            _rotationActionRight.action.performed -= RotateCameraRight;
+            _data.ScrollAction.action.performed -= ChangeSplinePosition;
+            _data.RotationAction.action.started -= RotatePressed;
+            _data.RotationAction.action.canceled -= RotationCanceled;
         }
 
         private void ChangeSplinePosition(InputAction.CallbackContext ctx)
@@ -88,63 +83,78 @@ namespace Game.Scripts.Player
             float elapsedTime = 0f;
             while (!_scrollTokenSource.IsCancellationRequested && elapsedTime < _scrollTime)
             {
-                _splineDolly.CameraPosition += scrollValue * _scrollSens * Time.deltaTime;
+                _data.SplineDolly.CameraPosition += scrollValue * _scrollSens * Time.deltaTime;
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(_scrollTokenSource.Token);
             }
         }
-        
-        private void RotateCameraRight(InputAction.CallbackContext obj)
+
+        private void RotatePressed(InputAction.CallbackContext ctx)
         {
-            if (_rotateState == RotateState.Right)
-                return;
-            
-            _rotateState = RotateState.Right;
-            _rotationTokenSource?.Cancel();
-            _rotationTokenSource?.Dispose();
-            _rotationTokenSource = new CancellationTokenSource();
-            
-            Debug.Log("Rotate Right");
-            RotateCamera(true).Forget();
+            if (_rotationAsyncTokenSource != null)
+            {
+                _rotationAsyncTokenSource.Cancel();
+                _rotationAsyncTokenSource.Dispose();
+            }
+
+            _rotationAsyncTokenSource = new CancellationTokenSource();
+            RotationAsync(_rotationAsyncTokenSource.Token).Forget();
         }
 
-        private void RotateCameraLeft(InputAction.CallbackContext obj)
+        private void RotationCanceled(InputAction.CallbackContext ctx)
         {
-            if (_rotateState == RotateState.Left)
-                return;
+            if (_rotationAsyncTokenSource == null) return;
             
-            _rotateState = RotateState.Left;
-            _rotationTokenSource?.Cancel();
-            _rotationTokenSource?.Dispose();
-            _rotationTokenSource = new CancellationTokenSource();
-            
-            Debug.Log("Rotate Left");
-            RotateCamera(false).Forget();
+            _rotationAsyncTokenSource.Cancel();
+        }
+
+        private async UniTask RotationAsync(CancellationToken token)
+        {
+            Vector2 lastPos = Mouse.current.position.ReadValue();
+    
+            while (!token.IsCancellationRequested)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                Vector2 currentPos = Mouse.current.position.ReadValue();
+                Vector2 delta = currentPos - lastPos;
+        
+                delta *= _rotationSettings.Sensitivity / 100;
+                
+                Vector3 currentRotation = _data.CameraRotationTarget.localEulerAngles;
+                
+                currentRotation.x = NormalizeAngle(currentRotation.x);
+                currentRotation.y = NormalizeAngle(currentRotation.y);
+                
+                currentRotation.y += delta.x;
+                currentRotation.x -= delta.y;
+                
+                currentRotation.x = Mathf.Clamp(currentRotation.x, _rotationSettings.ClampRotationX.x, _rotationSettings.ClampRotationX.y);
+                currentRotation.y = Mathf.Clamp(currentRotation.y, _rotationSettings.ClampRotationY.x, _rotationSettings.ClampRotationY.y);
+                currentRotation.z = 0f;
+                
+                _data.CameraRotationTarget.localRotation = Quaternion.Euler(currentRotation);
+        
+                lastPos = currentPos;
+            }
+        }
+
+        private float NormalizeAngle(float angle)
+        {
+            angle %= 360f;
+            if (angle > 180f) angle -= 360f;
+            if (angle < -180f) angle += 360f;
+            return angle;
         }
         
-        private async UniTask RotateCamera(bool isRight)
+        [Serializable]
+        private struct RotationSettings
         {
-            Transform splineTransform = _data.SplineDolly.Spline.transform;
-            float currentAngle = splineTransform.eulerAngles.y;
-            currentAngle = Mathf.Round(currentAngle / 90f) * 90f;
-            
-            float targetAngle = isRight ? currentAngle - 90f : currentAngle + 90f;
-            targetAngle = ((targetAngle % 360f) + 360f) % 360f;
-            
-            Quaternion rotationStart = splineTransform.rotation;
-            Quaternion rotationEnd = Quaternion.Euler(0f, targetAngle, 0f);
-            
-            float elapsedTime = 0f;
-            while (!_rotationTokenSource.IsCancellationRequested && elapsedTime < _rotationTime)
-            {
-                float t = elapsedTime / _rotationTime;
-                Quaternion rotation = Quaternion.Slerp(rotationStart, rotationEnd, t);
-                splineTransform.rotation = rotation;
-                elapsedTime += Time.deltaTime;
-                await UniTask.Yield(_rotationTokenSource.Token);
-            }
-            
-            _rotateState = RotateState.None;
+            [Header("Rotation Limits")]
+            public Vector2 ClampRotationX; // X.min = взгляд вниз, X.max = взгляд вверх
+            public Vector2 ClampRotationY; // Y.min = левый предел, Y.max = правый предел
+    
+            [Header("Mouse Settings")]
+            [Range(1f, 100f)] public float Sensitivity;
         }
     }
 }

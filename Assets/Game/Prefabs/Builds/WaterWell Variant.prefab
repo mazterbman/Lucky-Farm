@@ -277,22 +277,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 700de779146115e49b68a44f84e5ea41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.TrackPlayerView
-  _data:
-    SplineDolly: {fileID: 0}
-    Camera: {fileID: 0}
-    PlayerInput: {fileID: 0}
-    PlayerInputController: {fileID: 0}
-    ScrollAction: {fileID: 0}
-    RotationActionLeft: {fileID: 0}
-    RotationActionRight: {fileID: 0}
-    ClickAction: {fileID: 0}
   _trackMode: 3
   _ignoreVerticalRotation: 0
   _rotationOffset: {x: 0, y: 0, z: 0}
   _freezeRotation:
-    X: 1
+    UseFreeze: 1
+    X: 0
     Y: 0
     Z: 1
+  _clampRotation:
+    UseClamp: 1
+    ClampRotationX: {x: 0, y: 15}
+    ClampRotationY: {x: -360, y: 360}
+    ClampRotationZ: {x: -360, y: 360}
 --- !u!1001 &7584914537231933131
 PrefabInstance:
   m_ObjectHideFlags: 0

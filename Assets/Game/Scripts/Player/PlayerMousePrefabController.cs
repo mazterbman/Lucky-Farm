@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Scripts.Building;
 using Game.Scripts.Grass;
 using Game.Scripts.Mobs;
@@ -16,7 +17,7 @@ namespace Game.Scripts.Player
         [Inject] private GrassData _grassData;
         
         private BuildingController _buildingController;
-        private MobItemController _mobItemController;
+        private List<MobItemController> _mobItemControllers = new List<MobItemController>();
         private StateMousePrefab _state = StateMousePrefab.Disable;
 
         public void SetWorldPosition(Vector3 worldPosition)
@@ -36,12 +37,21 @@ namespace Game.Scripts.Player
 
         public void EnterItem(MobItemController controller)
         {
-            if (_state is StateMousePrefab.OnItem or StateMousePrefab.OnBuilding)
+            if (_state is StateMousePrefab.OnBuilding)
                 return;
 
-            _mobItemController = controller;
+            _mobItemControllers.Add(controller);
             _holderObj.SetActive(false);
             _state = StateMousePrefab.OnItem;
+        }
+
+        public void ExitItem(MobItemController controller)
+        {
+            _mobItemControllers.Remove(controller);
+            if (_mobItemControllers.Count <= 0 && !_buildingController)
+            {
+                DisableObject();
+            }
         }
         
         public void OnGrass()
@@ -59,7 +69,6 @@ namespace Game.Scripts.Player
                 return;
             
             _holderObj.SetActive(false);
-            _mobItemController = null;
             _buildingController = null;
             transform.position = Vector3.one * -10;
             _state = StateMousePrefab.Disable;
@@ -81,7 +90,7 @@ namespace Game.Scripts.Player
                     break;
                 
                 case StateMousePrefab.OnItem:
-                    _mobItemController.OnClick();
+                    _mobItemControllers.ForEach(item => item.OnClick());
                     DisableObject();
                     break;
                 

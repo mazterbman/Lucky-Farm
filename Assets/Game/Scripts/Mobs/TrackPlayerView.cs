@@ -7,16 +7,15 @@ namespace Game.Scripts.Mobs
 {
     public class TrackPlayerView : MonoBehaviour
     {
-        [Header("References Injected")] 
-        [Inject] [SerializeField] private PlayerData _data = null;
-
         [Header("Tracking Settings")] 
         [SerializeField] private TrackMode _trackMode = TrackMode.FullLookAt;
         [SerializeField] private bool _ignoreVerticalRotation = false;
         [SerializeField] private Vector3 _rotationOffset = Vector3.zero;
         [SerializeField] private FreezeRotation _freezeRotation;
+        [SerializeField] private ClampRotation _clampRotation;
         
-        private Camera _camera = null;
+        [Inject] private PlayerData _data = null;
+        
         private Vector3 _initialEulerAngles;
 
         private enum TrackMode
@@ -29,7 +28,6 @@ namespace Game.Scripts.Mobs
 
         private void Awake()
         {
-            _camera = _data.Camera;
             _initialEulerAngles = transform.eulerAngles;
         }
 
@@ -47,7 +45,7 @@ namespace Game.Scripts.Mobs
 
         private void FullLookAt()
         {
-            Vector3 direction = _camera.transform.position - transform.position;
+            Vector3 direction = _data.Camera.transform.position - transform.position;
             
             if (_ignoreVerticalRotation)
                 direction.y = 0;
@@ -62,7 +60,7 @@ namespace Game.Scripts.Mobs
         private void BillboardMode()
         {
             // Объект всегда смотрит на камеру своей передней стороной
-            Vector3 direction = _camera.transform.position - transform.position;
+            Vector3 direction = _data.Camera.transform.position - transform.position;
             
             if (direction != Vector3.zero)
             {
@@ -73,7 +71,7 @@ namespace Game.Scripts.Mobs
 
         private void YAxisOnlyMode()
         {
-            Vector3 direction = _camera.transform.position - transform.position;
+            Vector3 direction = _data.Camera.transform.position - transform.position;
             direction.y = 0;
             
             if (direction != Vector3.zero)
@@ -87,7 +85,7 @@ namespace Game.Scripts.Mobs
 
         private void CanvasWorldMode()
         {
-            Vector3 direction = _camera.transform.position - transform.position;
+            Vector3 direction = _data.Camera.transform.position - transform.position;
             
             if (_ignoreVerticalRotation)
                 direction.y = 0;
@@ -106,16 +104,23 @@ namespace Game.Scripts.Mobs
         {
             Vector3 targetEuler = targetRotation.eulerAngles;
             Vector3 currentEuler = transform.eulerAngles;
+
+            if (_clampRotation.UseClamp)
+            {
+                targetEuler.x = Mathf.Clamp(targetEuler.x, _clampRotation.ClampRotationX.x,
+                    _clampRotation.ClampRotationX.y);
+                targetEuler.y = Mathf.Clamp(targetEuler.y, _clampRotation.ClampRotationY.x,
+                    _clampRotation.ClampRotationY.y);
+                targetEuler.z = Mathf.Clamp(targetEuler.z, _clampRotation.ClampRotationZ.x,
+                    _clampRotation.ClampRotationZ.y);
+            }
             
-            // Применяем заморозку осей
-            if (_freezeRotation.X)
-                targetEuler.x = currentEuler.x;
-            
-            if (_freezeRotation.Y)
-                targetEuler.y = currentEuler.y;
-            
-            if (_freezeRotation.Z)
-                targetEuler.z = currentEuler.z;
+            if (_freezeRotation.UseFreeze)
+            {
+                targetEuler.x = _freezeRotation.X ? currentEuler.x : targetEuler.x;
+                targetEuler.y = _freezeRotation.Y ? currentEuler.y : targetEuler.y;
+                targetEuler.z = _freezeRotation.Z ? currentEuler.z : targetEuler.z;
+            }
             
             transform.eulerAngles = targetEuler;
         }
@@ -123,9 +128,22 @@ namespace Game.Scripts.Mobs
         [Serializable]
         private struct FreezeRotation
         {
+            public bool UseFreeze;
+            
             public bool X;
             public bool Y;
             public bool Z;
+        }
+        
+        [Serializable]
+        public struct ClampRotation
+        {
+            public bool UseClamp;
+            
+            [Header("Rotation Limits")]
+            public Vector2 ClampRotationX; // X.min = взгляд вниз, X.max = взгляд вверх
+            public Vector2 ClampRotationY; // Y.min = левый предел, Y.max = правый предел
+            public Vector2 ClampRotationZ; //
         }
     }
 }

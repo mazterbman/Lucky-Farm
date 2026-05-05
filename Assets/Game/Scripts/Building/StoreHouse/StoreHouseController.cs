@@ -10,14 +10,14 @@ namespace Game.Scripts.Building.StoreHouse
 {
     public class StoreHouseController : BuildingController
     {
+        [Header("References")] 
+        [SerializeField] private StoreHouseUiController _uiController;
+        [SerializeField] private List<StoreItem> _storeItems;
+        
         [Header("Settings")] 
         [SerializeField] private int _maxItems = 100;
 
-        [Header("References")]
-        [SerializeField] private List<StoreItem> _storeItems;
-
         [Inject] private SettingsLevelData _levelData;
-        [Inject] private BuildingData _buildingData;
 
         private int _currentCountItems = 0;
         private UnityAction _onUpdateItems;
@@ -36,13 +36,14 @@ namespace Game.Scripts.Building.StoreHouse
         {
             if (item == null)
                 return false;
-
+            
             if (_currentCountItems + item.Count > _maxItems)
                 return false;
             
             if (_storeItems.All(storeItem => storeItem.Item.Type != item.Item.Type))
             {
                 _storeItems.Add(item);
+                Debug.Log($"Was Add count items{item.Count}");
             }
             else
             {
@@ -70,6 +71,11 @@ namespace Game.Scripts.Building.StoreHouse
             _onUpdateItems?.Invoke();
             return true;
         }
+
+        public void ReplaceItemUi(StoreItem item, bool isRight)
+        {
+            _uiController.ReplaceItem(item, isRight);
+        }
         
 
         protected override void RemoveListeners()
@@ -87,7 +93,7 @@ namespace Game.Scripts.Building.StoreHouse
         private void OpenMenu()
         {
             UpdateStore();
-            _buildingData.StoreHouseUiController.Show(_storeItems);
+            _uiController.Show(_storeItems);
         }
         
         private void UpdateStore()

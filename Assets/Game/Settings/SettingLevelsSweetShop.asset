@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SettingLevelsSweetShop
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Settings.SettingLevelsSweetShop
   _standardMaxItems: 1
-  _standardTimeWaite: 120
+  _standardTimeWaite: 15
   LevelSettingsList:
-  - MaxMod: 0
+  - MaxMod: 1
     TimeWaiteMod: 1
   - MaxMod: 2
     TimeWaiteMod: 0.85
