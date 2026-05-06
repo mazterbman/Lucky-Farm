@@ -46,7 +46,7 @@ namespace Game.Scripts.Mobs.Mob
                     FindFood().Forget();
                     break;
                 
-                case MobHungerStatus.Dead:
+                case MobHungerStatus.VeryHungry:
                     Dead();
                     break;
             }

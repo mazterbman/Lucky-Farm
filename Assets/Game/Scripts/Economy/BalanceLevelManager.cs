@@ -9,10 +9,13 @@ namespace Game.Scripts.Economy
     {
         public UnityAction OnUpdateBalance;
 
-        [Inject] private SettingsLevelData _levelData;
+        [Header("References")] 
+        [SerializeField] private BalanceUiController _uiController;
         
         [Header("Debug Log")] 
         [SerializeField] [TextArea(3,10)] private string _debugString;
+        
+        [Inject] private SettingsLevelData _levelData;
         
         private int _balance;
 
@@ -20,6 +23,7 @@ namespace Game.Scripts.Economy
         {
             _balance = _levelData.StartBalanceLevel;
             OnUpdateBalance += UpdateBalance;
+            UpdateBalance();
         }
 
         private void OnDestroy()
@@ -64,6 +68,7 @@ namespace Game.Scripts.Economy
         private void UpdateBalance()
         {
             _debugString = $"CurrentBalance = {_balance}";
+            _uiController.UpdateMoney(_balance);
         }
         
     }

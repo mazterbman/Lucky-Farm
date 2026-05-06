@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Game.Scripts.Building.SweetShop
+namespace Game.Scripts.Building.Shop
 {
-    public class SweetShopUiController : MonoBehaviour
+    public class ShopUiController : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private ResourceBar _resourceBar;

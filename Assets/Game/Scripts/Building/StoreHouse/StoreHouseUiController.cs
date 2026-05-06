@@ -16,7 +16,8 @@ namespace Game.Scripts.Building.StoreHouse
 {
     public class StoreHouseUiController : MonoBehaviour
     {
-        [Header("References")]
+        [Header("References")] 
+        [SerializeField] private Canvas _canvas;
         [SerializeField] private AssetReference _refUiItem;
         [SerializeField] private Transform _leftParent;
         [SerializeField] private Transform _rightParent;
@@ -41,6 +42,7 @@ namespace Game.Scripts.Building.StoreHouse
         private CancellationTokenSource _tokenSource;
         private bool _refIsLoaded = false;
         private bool _refIsLoading = false;
+        private bool _canSellItems = true;
         
         private void Awake()
         {
@@ -68,7 +70,7 @@ namespace Game.Scripts.Building.StoreHouse
         public void Show(List<StoreItem> items)
         {
             _playerData.PlayerInputController.SwitchToUiMap();
-            gameObject.SetActive(true);
+            _canvas.gameObject.SetActive(true);
 
             foreach (var item in items)
             {
@@ -82,16 +84,19 @@ namespace Game.Scripts.Building.StoreHouse
         {
             _playerData.PlayerInputController.SwitchToPlayerMap();
             ClearItems();
-            gameObject.SetActive(false);
+            _canvas.gameObject.SetActive(false);
         }
 
-        public void Hide(InputAction.CallbackContext ctx)
+        private void Hide(InputAction.CallbackContext ctx)
         {
             Hide();
         }
 
         public void ReplaceItem(StoreItem item, bool isRight)
         {
+            if (!_canSellItems)
+                return;
+            
             var groupFrom = isRight ? ref _rightGroup : ref _leftGroup;
             var groupTo = isRight ? ref _leftGroup : ref _rightGroup;
             MoveItem(item, ref groupFrom, ref groupTo, isRight);
@@ -99,17 +104,24 @@ namespace Game.Scripts.Building.StoreHouse
         
         public void SellItems()
         {
-            if (_rightGroup.Count <= 0)
+            if (_rightGroup.Count <= 0 || !_canSellItems)
                 return;
 
+            int countOfMoney = 0;
             foreach (var item in _rightGroup)
             {
-                _mobData.MobAnimalManager.TrySellAnimal(item.StoreItem);
-                _economyData.BalanceLevelManager.TryAdd(item.StoreItem.GetAllCoast());
+                _mobData.MobAnimalManager.TryRemoveAnimal(item.StoreItem);
                 _buildingData.StoreHouseController.TryRemoveItem(item.StoreItem);
+                countOfMoney += item.StoreItem.GetAllCoast();
+                //_economyData.BalanceLevelManager.TryAdd(item.StoreItem.GetAllCoast());
             }
+            
+            _buildingData.StoreHouseController.StartMoveTrack(countOfMoney);
             ClearGroup(_rightGroup);
+            _canSellItems = false;
         }
+
+        public void CanSellItems(bool value) => _canSellItems = value;
 
 
         private void MoveItem(StoreItem item, ref List<StoreHouseUiItemController> fromGroup, ref List<StoreHouseUiItemController> toGroup, bool isRightTarget)

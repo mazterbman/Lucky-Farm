@@ -16,7 +16,7 @@ namespace Game.Scripts.Mobs
             SpawnAnimals();
         }
 
-        public bool TrySellAnimal(StoreItem item)
+        public bool TryRemoveAnimal(StoreItem item)
         {
             if (item == null)
             {

@@ -7,12 +7,12 @@ using Game.Scripts.Settings;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.Building.SweetShop
+namespace Game.Scripts.Building.Shop
 {
-    public class SweetShopController : BuildingController
+    public class ShopController : BuildingController
     {
         [Header("References")]
-        [SerializeField] private SweetShopUiController _shopUiController;
+        [SerializeField] private ShopUiController _shopUiController;
         
         [Header("Settings")] 
         [SerializeField] private SweepShopItem _itemIn;

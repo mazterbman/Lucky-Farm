@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: SettingLevelsStoreHouse
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Settings.SettingLevelsStoreHouse
   _standardMaxItems: 100
+  _standardSecondsOnSale: 100
   LevelSettingsList:
   - MaxMod: 1
+    SecondsMod: 1
   - MaxMod: 1.5
+    SecondsMod: 0.85
   - MaxMod: 2
+    SecondsMod: 0.7

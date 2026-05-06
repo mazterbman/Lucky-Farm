@@ -50,7 +50,7 @@ namespace Game.Scripts.Mobs.Mob
             
             if (PercentCurrentHunger <= 0)
             {
-                ChangeStatus(MobHungerStatus.Dead);
+                ChangeStatus(MobHungerStatus.VeryHungry);
                 return;
             }
             
@@ -94,6 +94,6 @@ namespace Game.Scripts.Mobs.Mob
     {
         Normal = 0,
         Hungry,
-        Dead,
+        VeryHungry,
     }
 }
