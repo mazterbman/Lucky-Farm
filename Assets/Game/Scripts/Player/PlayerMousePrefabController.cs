@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Game.Scripts.Building;
 using Game.Scripts.Grass;
 using Game.Scripts.Mobs;
-using Game.Scripts.Mobs.Mob;
+using Game.Scripts.Mobs.FriendlyMob;
 using UnityEngine;
 using Zenject;
 

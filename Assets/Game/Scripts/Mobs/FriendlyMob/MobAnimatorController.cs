@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace Game.Scripts.Mobs.Mob
+namespace Game.Scripts.Mobs.FriendlyMob
 {
     public class MobAnimatorController: MonoBehaviour
     {

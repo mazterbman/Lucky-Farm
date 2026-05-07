@@ -6,7 +6,7 @@ using Game.Scripts.Player;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scripts.Mobs.Mob
+namespace Game.Scripts.Mobs.FriendlyMob
 {
     public class MobItemController : MonoBehaviour, IClickObj
     {

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using Zenject;
 
-namespace Game.Scripts.Mobs.Mob
+namespace Game.Scripts.Mobs.FriendlyMob
 {
     public class MobPathController : MonoBehaviour
     {

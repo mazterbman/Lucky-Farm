@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 using Random = UnityEngine.Random;
 
-namespace Game.Scripts.Mobs.Mob
+namespace Game.Scripts.Mobs.FriendlyMob
 {
     public class MobItemSpawner : MonoBehaviour
     {

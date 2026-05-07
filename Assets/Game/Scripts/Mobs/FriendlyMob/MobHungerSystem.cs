@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
-namespace Game.Scripts.Mobs.Mob
+namespace Game.Scripts.Mobs.FriendlyMob
 {
     public class MobHungerSystem : MonoBehaviour
     {

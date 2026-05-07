@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.Mobs;
-using Game.Scripts.Mobs.Mob;
+using Game.Scripts.Mobs.FriendlyMob;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
