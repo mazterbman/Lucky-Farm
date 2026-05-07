@@ -164,12 +164,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc9e355cfd3a17041b97c34da8ee0ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobAnimalSpawner
-  _chickenPrefab:
-    m_AssetGUID: 010d0431aec4dfc4c9f9f47ce95dcc2b
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+  _animalReferences:
+  - Animal:
+      m_AssetGUID: 010d0431aec4dfc4c9f9f47ce95dcc2b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
+    Type: 2
 --- !u!114 &30013740
 MonoBehaviour:
   m_ObjectHideFlags: 0

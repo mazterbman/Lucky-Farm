@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.Building;
@@ -16,7 +17,7 @@ namespace Game.Scripts.Mobs
     public class MobAnimalSpawner : MonoBehaviour
     {
         [Header("References")] 
-        [SerializeField] private AssetReference _chickenPrefab;
+        [SerializeField] private List<AnimalReference> _animalReferences;
         
         [Inject] private ItemsStorage _itemsStorage;
         [Inject] private BuildingData _buildingData;
@@ -29,7 +30,6 @@ namespace Game.Scripts.Mobs
         
         private bool _isLoaded;
         private bool _isLoading;
-        private GameObject _loadedChicken;
         private CancellationTokenSource _tokenSource;
 
         private void Awake()
@@ -68,7 +68,7 @@ namespace Game.Scripts.Mobs
                 await UniTask.WaitWhile(() => !_isLoaded, cancellationToken: _tokenSource.Token);
             }
             
-            SpawnAsync(_loadedChicken, TypeItem.Chicken,_tokenSource.Token).Forget();
+            SpawnAsync(GetLoadedRef(TypeItem.Chicken), TypeItem.Chicken,_tokenSource.Token).Forget();
             _buildingData.StoreHouseController.TryAddItem(new StoreItem(item, 1));
         }
         
@@ -107,16 +107,26 @@ namespace Game.Scripts.Mobs
                 return;
             
             _isLoading = true;
-            var handle = _chickenPrefab.LoadAssetAsync<GameObject>();
+            foreach (var animal in _animalReferences)
+            {
+                var handle = animal.Animal.LoadAssetAsync<GameObject>();
             
-            await handle.Task.AsUniTask();
-            if (token.IsCancellationRequested)
-                return;
+                await handle.Task.AsUniTask();
+                if (token.IsCancellationRequested)
+                    return;
 
-            _loadedChicken = handle.Result;
-            await UniTask.NextFrame();
+                animal.LoadedAnimal = handle.Result;
+                await UniTask.NextFrame();
+            }
             
             _isLoaded = true;
+        }
+
+        private GameObject GetLoadedRef(TypeItem typeItem)
+        {
+            return _animalReferences.All(a => a.Type != typeItem) ?
+                null :
+                _animalReferences.Find(a => a.Type == typeItem).LoadedAnimal;
         }
         
         [Serializable]
@@ -130,6 +140,14 @@ namespace Game.Scripts.Mobs
                 Animal = go;
                 Type = type;
             }
+        }
+        
+        [Serializable]
+        private class AnimalReference
+        {
+            public AssetReference Animal;
+            public TypeItem Type;
+            [NonSerialized] public GameObject LoadedAnimal;
         }
     }
 }
