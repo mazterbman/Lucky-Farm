@@ -17,6 +17,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: -3291729964575708926, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
+      propertyPath: _mobController
+      value: 
+      objectReference: {fileID: 5032026331047003925}
+    - target: {fileID: -3291729964575708926, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
       propertyPath: _itemForSpawn.m_AssetGUID
       value: 070f57687f00bdd4e94c65b279e898d9
       objectReference: {fileID: 0}
@@ -81,3 +85,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
+--- !u!114 &5032026331047003925 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3235764292532268499, guid: 75a0d3d652107e647805eab56c18b67f, type: 3}
+  m_PrefabInstance: {fileID: 7580375331115068102}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e14c2ae70384804587f2cbc876ba05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Mobs.MobController

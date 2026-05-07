@@ -35,6 +35,8 @@ namespace Game.Scripts.Mobs.Mob
             _hungerSystem.OnStatusChange -= MobStatusChange;
         }
 
+        public float PercentCurrentHunger => _hungerSystem.PercentCurrentHunger;
+        
         private void MobStatusChange(MobHungerStatus arg0)
         {
             switch (arg0)
@@ -44,10 +46,6 @@ namespace Game.Scripts.Mobs.Mob
                 
                 case MobHungerStatus.Hungry:
                     FindFood().Forget();
-                    break;
-                
-                case MobHungerStatus.VeryHungry:
-                    Dead();
                     break;
             }
         }
@@ -78,13 +76,11 @@ namespace Game.Scripts.Mobs.Mob
 
             await UniTask.WaitForEndOfFrame(_tokenSource.Token);
             
-            if (_hungerSystem.HungerStatus == MobHungerStatus.Hungry)
+            _pathController.ReturnToWandering();
+            if (_hungerSystem.CurrentStatus is MobHungerStatus.Hungry)
             {
                 FindFood().Forget();
-                return;
             }
-            
-            _pathController.ReturnToWandering();
         }
 
         private async UniTask FindFood()

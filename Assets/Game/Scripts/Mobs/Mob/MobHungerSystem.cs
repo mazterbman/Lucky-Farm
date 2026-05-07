@@ -22,14 +22,14 @@ namespace Game.Scripts.Mobs.Mob
         [Header("Debug Log")] 
         [SerializeField] [TextArea(5, 10)] private string _debugString;
 
-        private MobHungerStatus _hungerStatus;
+        private MobHungerStatus _currentStatus;
         private float _currentHunger = 0;
         private float _currentPercentFactor;
 
         private void Start()
         {
             _hungerBar.ResetBar();
-            _hungerStatus = MobHungerStatus.Normal;
+            _currentStatus = MobHungerStatus.Normal;
             _currentHunger = _maxHunger;
 
             RandomiseHunger();
@@ -42,17 +42,14 @@ namespace Game.Scripts.Mobs.Mob
 
         private void Damage()
         {
+            if (PercentCurrentHunger <= 0)
+                return;
+            
             _currentHunger = Mathf.Clamp(_currentHunger -_damagePerSec * Time.deltaTime, 0, _maxHunger);
             _hungerBar.UpdateBar(PercentCurrentHunger);
 
             _debugString = $"Current Hunger = {_currentHunger}";
             _debugString += $"\nPercent Hunger = {PercentCurrentHunger}";
-            
-            if (PercentCurrentHunger <= 0)
-            {
-                ChangeStatus(MobHungerStatus.VeryHungry);
-                return;
-            }
             
             if (PercentCurrentHunger < _currentPercentFactor)
             {
@@ -65,7 +62,7 @@ namespace Game.Scripts.Mobs.Mob
 
         private void ChangeStatus(MobHungerStatus newStatus)
         {
-            if (newStatus == _hungerStatus)
+            if (newStatus == _currentStatus)
                 return;
 
             if (newStatus == MobHungerStatus.Normal)
@@ -73,7 +70,7 @@ namespace Game.Scripts.Mobs.Mob
                 RandomiseHunger();
             }
             
-            _hungerStatus = newStatus;
+            _currentStatus = newStatus;
             OnStatusChange?.Invoke(newStatus);
         }
         
@@ -84,9 +81,8 @@ namespace Game.Scripts.Mobs.Mob
         }
 
 
-        public MobHungerStatus HungerStatus => _hungerStatus;
+        public MobHungerStatus CurrentStatus => _currentStatus;
         public void EatFood() => _currentHunger += _maxHunger / 2;
-        public float CurrentHunger => _currentHunger;
         public float PercentCurrentHunger => _currentHunger / _maxHunger;
     }
 
@@ -94,6 +90,5 @@ namespace Game.Scripts.Mobs.Mob
     {
         Normal = 0,
         Hungry,
-        VeryHungry,
     }
 }

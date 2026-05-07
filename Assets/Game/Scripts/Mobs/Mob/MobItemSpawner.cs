@@ -13,6 +13,7 @@ namespace Game.Scripts.Mobs.Mob
     {
         [Header("References")] 
         [SerializeField] private AssetReferenceGameObject _itemForSpawn;
+        [SerializeField] private MobController _mobController;
 
         [Header("Settings")]
         [SerializeField] [Range(0, 600)] private float _timeForSpawn = 500;
@@ -89,6 +90,12 @@ namespace Game.Scripts.Mobs.Mob
             {
                 time += Time.deltaTime;
                 _debugString = $"Time Past = {time}";
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+
+            while (Mathf.Approximately(_mobController.PercentCurrentHunger, 0) 
+                   && !token.IsCancellationRequested)
+            {
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             

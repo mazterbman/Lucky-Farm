@@ -31,13 +31,6 @@ namespace Game.Scripts.Mobs.Mob
         private bool _hasTarget = false;
         private bool _needReturnWander = false;
         
-        private enum MobMovementState
-        {
-            Wandering,      // Случайное блуждание
-            MovingToTarget, // Движение к конкретной точке
-            ReturningToWander // Возврат к блужданию
-        }
-
         private void Start()
         {
             UpdateWanderCenter(_mobData.MeshSurface.transform.position);
@@ -228,16 +221,14 @@ namespace Game.Scripts.Mobs.Mob
             }
         }
         
-        public bool IsMovingToTarget => _currentState == MobMovementState.MovingToTarget;
-        public bool IsWandering => _currentState == MobMovementState.Wandering;
-        
         public void StopMoving()
         {
             _navMeshAgent.isStopped = true;
             _isWaiting = false;
         }
         
-        public void ResumeMoving() => _navMeshAgent.isStopped = false;
+        public MobMovementState CurrentState => _currentState;
+        public void  ResumeMoving() => _navMeshAgent.isStopped = false;
         public void UpdateWanderCenter(Vector3 newCenter) => _startPosition = newCenter;
         
         #endregion
@@ -260,5 +251,12 @@ namespace Game.Scripts.Mobs.Mob
         }
         
         #endregion
+    }
+    
+    public enum MobMovementState
+    {
+        Wandering,      // Случайное блуждание
+        MovingToTarget, // Движение к конкретной точке
+        ReturningToWander // Возврат к блужданию
     }
 }
