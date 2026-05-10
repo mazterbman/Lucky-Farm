@@ -10,7 +10,6 @@ namespace Game.Scripts.Player
     {
         public CinemachineSplineDolly SplineDolly = null;
         public Camera Camera = null;
-        public PlayerInput PlayerInput;
         public PlayerInputController PlayerInputController;
         
         [Space]

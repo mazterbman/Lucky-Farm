@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game.Scripts.Economy;
+using Game.Scripts.Items;
 using Game.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.Events;
@@ -75,6 +76,16 @@ namespace Game.Scripts.Building.StoreHouse
             _onUpdateItems?.Invoke();
             return true;
         }
+        
+        public bool TryGetCountItem(TypeItem typeItem, out int count)
+        {
+            count = 0;
+            if (_storeItems.All(storeItem => storeItem.Item.Type != typeItem)) 
+                return false;
+
+            count = _storeItems.Find(arg1 => arg1.Item.Type == typeItem).Count;
+            return true;
+        }
 
         public void ReplaceItemUi(StoreItem item, bool isRight)
         {
@@ -91,6 +102,8 @@ namespace Game.Scripts.Building.StoreHouse
             _economyData.BalanceLevelManager.TryAdd(countOfMoney);
             _uiController.CanSellItems(true);
         }
+        
+        public void EnableInterface(bool enable) => _interfaceController.EnableInterface(enable);
         
 
         protected override void RemoveListeners()

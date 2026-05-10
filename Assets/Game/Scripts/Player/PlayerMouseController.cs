@@ -25,8 +25,15 @@ namespace Game.Scripts.Player
         [Inject] private DiContainer _container;
         [Inject] private PlayerData _playerData;
 
+        private bool _playerMap = true;
         private CancellationTokenSource _tokenSource;
         private PlayerMousePrefabController _createdMouse;
+
+        private void Awake()
+        {
+            _playerData.PlayerInputController.OnSwitchPlayerMap += SwitchOnPlayerMap;
+            _playerData.PlayerInputController.OnSwitchUiMap += SwitchOnUiMap;
+        }
 
         private void Start()
         {
@@ -43,7 +50,7 @@ namespace Game.Scripts.Player
             if (!_createdMouse)
                 return;
 
-            if (!TryGetMouseWorldPosition(out var position))
+            if (!TryGetMouseWorldPosition(out var position) || !_playerMap)
             {
                 _createdMouse.DisableObject();
                 return;
@@ -59,6 +66,9 @@ namespace Game.Scripts.Player
             _tokenSource?.Dispose();
             
             _playerData.ClickAction.action.performed -= OnClk;
+            
+            _playerData.PlayerInputController.OnSwitchPlayerMap -= SwitchOnPlayerMap;
+            _playerData.PlayerInputController.OnSwitchUiMap -= SwitchOnUiMap;
         }
 
         private async UniTask CreateMousePrefab(CancellationToken token)
@@ -106,5 +116,8 @@ namespace Game.Scripts.Player
             
             _createdMouse.ClkOnObject();
         }
+
+        private void SwitchOnPlayerMap() => _playerMap = true;
+        private void SwitchOnUiMap() => _playerMap = false;
     }
 }

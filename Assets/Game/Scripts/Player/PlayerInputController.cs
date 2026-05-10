@@ -1,30 +1,35 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using Zenject;
 
 namespace Game.Scripts.Player
 {
     public class PlayerInputController : MonoBehaviour
     {
+        public UnityAction OnSwitchPlayerMap;
+        public UnityAction OnSwitchUiMap;
+        
+        [Header("References")] 
+        [SerializeField] private PlayerInput _playerInput;
+        
         [Header("Settings")] 
         [SerializeField] private bool _playerMapOnStart = true;
-        
-        [Inject] private PlayerData _playerData;
 
         private void Start()
         {
-            _playerData.PlayerInput.SwitchCurrentActionMap(_playerMapOnStart ? StaticValues.PlayerMapName : StaticValues.UiMapName);
+            _playerInput.SwitchCurrentActionMap(_playerMapOnStart ? StaticValues.PlayerMapName : StaticValues.UiMapName);
         }
 
         public void SwitchToPlayerMap()
         {
-            _playerData.PlayerInput.SwitchCurrentActionMap(StaticValues.PlayerMapName);
+            _playerInput.SwitchCurrentActionMap(StaticValues.PlayerMapName);
+            OnSwitchPlayerMap?.Invoke();
         }
 
         public void SwitchToUiMap()
         {
-            _playerData.PlayerInput.SwitchCurrentActionMap(StaticValues.UiMapName);
+            _playerInput.SwitchCurrentActionMap(StaticValues.UiMapName);
+            OnSwitchUiMap?.Invoke();
         }
     }
 }

@@ -69,8 +69,7 @@ namespace Game.Scripts.Building.StoreHouse
 
         public void Show(List<StoreItem> items)
         {
-            _playerData.PlayerInputController.SwitchToUiMap();
-            _canvas.gameObject.SetActive(true);
+           ControlPopUp(true);
 
             foreach (var item in items)
             {
@@ -82,9 +81,8 @@ namespace Game.Scripts.Building.StoreHouse
 
         public void Hide()
         {
-            _playerData.PlayerInputController.SwitchToPlayerMap();
+            ControlPopUp(false);
             ClearItems();
-            _canvas.gameObject.SetActive(false);
         }
 
         private void Hide(InputAction.CallbackContext ctx)
@@ -124,6 +122,16 @@ namespace Game.Scripts.Building.StoreHouse
         public void CanSellItems(bool value) => _canSellItems = value;
 
 
+        private void ControlPopUp(bool show)
+        {
+            _economyData.BalanceLevelManager.EnableInterface(!show);
+            _canvas.gameObject.SetActive(show);
+            _buildingData.StoreHouseController.EnableInterface(!show);
+            
+            if (show) _playerData.PlayerInputController.SwitchToUiMap();
+            else _playerData.PlayerInputController.SwitchToPlayerMap();
+        }
+        
         private void MoveItem(StoreItem item, ref List<StoreHouseUiItemController> fromGroup, ref List<StoreHouseUiItemController> toGroup, bool isRightTarget)
         {
             UpdateCountItem(item, -1 * item.Count, ref fromGroup);

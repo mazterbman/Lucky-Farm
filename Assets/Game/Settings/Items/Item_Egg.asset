@@ -10,7 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da9fc6f99c5ae9e4284b7d7d8612fc5c, type: 3}
-  m_Name: ItemType_Omelet
+  m_Name: Item_Egg
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Items.Item
-  Type: 1
-  Coast: 50
+  Type: 0
+  Coast: 20
+  LocalisationItem:
+    Key: Egg
+    TableCollection: {fileID: 11400000, guid: ff653d5b5ae964c4caf0755297dc9015, type: 2}
+  IcoItem: {fileID: 0}

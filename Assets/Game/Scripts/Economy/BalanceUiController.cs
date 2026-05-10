@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Scripts.Economy
 {
@@ -8,9 +10,26 @@ namespace Game.Scripts.Economy
         [Header("References")] 
         [SerializeField] private TMP_Text _text;
 
-        public void UpdateMoney(int money)
+        [Inject] private EconomyData _economyData;
+
+        private void Awake()
         {
-            _text.SetText(money.ToString("D"));
+            _economyData.BalanceLevelManager.OnUpdateBalance += UpdateMoney;
+        }
+
+        private void Start()
+        {
+            UpdateMoney();
+        }
+
+        private void OnDestroy()
+        {
+            _economyData.BalanceLevelManager.OnUpdateBalance -= UpdateMoney;
+        }
+
+        private void UpdateMoney()
+        {
+            _text.SetText(_economyData.BalanceLevelManager.Balance.ToString("D"));
         }
     }
 }

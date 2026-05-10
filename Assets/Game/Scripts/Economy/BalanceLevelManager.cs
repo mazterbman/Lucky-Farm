@@ -1,4 +1,5 @@
-﻿using Game.Scripts.Settings;
+﻿using System;
+using Game.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -9,8 +10,7 @@ namespace Game.Scripts.Economy
     {
         public UnityAction OnUpdateBalance;
 
-        [Header("References")] 
-        [SerializeField] private BalanceUiController _uiController;
+        [SerializeField] private Canvas _interfaceBalance;
         
         [Header("Debug Log")] 
         [SerializeField] [TextArea(3,10)] private string _debugString;
@@ -19,7 +19,7 @@ namespace Game.Scripts.Economy
         
         private int _balance;
 
-        private void Start()
+        private void Awake()
         {
             _balance = _levelData.StartBalanceLevel;
             OnUpdateBalance += UpdateBalance;
@@ -32,7 +32,8 @@ namespace Game.Scripts.Economy
         }
 
         public int Balance => _balance;
-
+        public void EnableInterface(bool enable) => _interfaceBalance?.gameObject.SetActive(enable);
+        
         public bool TryAdd(int money)
         {
             if (money <= 0)
@@ -68,7 +69,6 @@ namespace Game.Scripts.Economy
         private void UpdateBalance()
         {
             _debugString = $"CurrentBalance = {_balance}";
-            _uiController.UpdateMoney(_balance);
         }
         
     }

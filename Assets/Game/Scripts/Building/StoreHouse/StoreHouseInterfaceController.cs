@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Game.Scripts.Items;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using Zenject;
 
 namespace Game.Scripts.Building.StoreHouse
@@ -13,6 +10,9 @@ namespace Game.Scripts.Building.StoreHouse
     public class StoreHouseInterfaceController : MonoBehaviour
     {
         [Header("References")]
+        [SerializeField] private Canvas _canvasInterface;
+        
+        [Space]
         [SerializeField] private RectTransform _trackImage;
         [SerializeField] private TMP_Text _timeText;
 
@@ -27,10 +27,12 @@ namespace Game.Scripts.Building.StoreHouse
 
         private void Awake()
         {
+            _canvasInterface.gameObject.SetActive(true);
             _timeText.gameObject.SetActive(false);
         }
 
-        public void SetSecondsOnSale(int seconds) => _secondsOnSale = seconds; 
+        public void SetSecondsOnSale(int seconds) => _secondsOnSale = seconds;
+        public void EnableInterface(bool enable) => _canvasInterface?.gameObject.SetActive(enable);
         
         public async UniTask MoveToSellItemsAsync(int countOfMoney, CancellationToken token)
         {

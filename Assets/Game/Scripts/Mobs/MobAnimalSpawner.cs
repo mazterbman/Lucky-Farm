@@ -48,12 +48,13 @@ namespace Game.Scripts.Mobs
             _tokenSource?.Cancel();
             _tokenSource?.Dispose();
         }
-        
-        public async UniTaskVoid TrySpawnChicken(bool ignoreBalance = false)
-        {
-            if (!_itemsStorage.TryGetItem(TypeItem.Chicken, out var item))
-                return;
 
+        
+        public async UniTaskVoid TrySpawnAnimal(TypeItem typeItem, bool ignoreBalance = false)
+        {
+            if (!_itemsStorage.TryGetItem(typeItem, out var item))
+                return;
+            
             if (!ignoreBalance)
             {
                 if (_economyData.BalanceLevelManager.Balance < item.Coast)
@@ -68,9 +69,32 @@ namespace Game.Scripts.Mobs
                 await UniTask.WaitWhile(() => !_isLoaded, cancellationToken: _tokenSource.Token);
             }
             
-            SpawnAsync(GetLoadedRef(TypeItem.Chicken), TypeItem.Chicken,_tokenSource.Token).Forget();
+            SpawnAsync(GetLoadedRef(typeItem), typeItem,_tokenSource.Token).Forget();
             _buildingData.StoreHouseController.TryAddItem(new StoreItem(item, 1));
         }
+        
+        // public async UniTaskVoid TrySpawnChicken(bool ignoreBalance = false)
+        // {
+        //     if (!_itemsStorage.TryGetItem(TypeItem.Chicken, out var item))
+        //         return;
+        //
+        //     if (!ignoreBalance)
+        //     {
+        //         if (_economyData.BalanceLevelManager.Balance < item.Coast)
+        //             return;
+        //         
+        //         _economyData.BalanceLevelManager.TryRemove(item.Coast);
+        //     }
+        //
+        //     if (!_isLoaded)
+        //     {
+        //         if (!_isLoading) LoadAssetsAsync(_tokenSource.Token).Forget();
+        //         await UniTask.WaitWhile(() => !_isLoaded, cancellationToken: _tokenSource.Token);
+        //     }
+        //     
+        //     SpawnAsync(GetLoadedRef(TypeItem.Chicken), TypeItem.Chicken,_tokenSource.Token).Forget();
+        //     _buildingData.StoreHouseController.TryAddItem(new StoreItem(item, 1));
+        // }
         
         public void RemoveChicken()
         {
