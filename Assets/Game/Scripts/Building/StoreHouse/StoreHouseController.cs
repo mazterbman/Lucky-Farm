@@ -87,24 +87,20 @@ namespace Game.Scripts.Building.StoreHouse
             return true;
         }
 
-        public void ReplaceItemUi(StoreItem item, bool isRight)
-        {
-            _uiController.ReplaceItem(item, isRight);
-        }
+        public void ReplaceItemUi(StoreItem item, bool isRight) => _uiController.ReplaceItem(item, isRight);
+        public void StartMoveTrack(int countOfMoney) => _interfaceController.MoveToSellItemsAsync(countOfMoney, DestroyTokenSource.Token).Forget();
+        public void EnableInterface(bool enable) => _interfaceController.EnableInterface(enable);
         
-        public void StartMoveTrack(int countOfMoney)
-        {
-            _interfaceController.MoveToSellItemsAsync(countOfMoney, DestroyTokenSource.Token).Forget();
-        }
-
+        public BoxCollider LeftStoreCollider => _uiController?.LeftStoreCollider;
+        public BoxCollider RightBoxCollider => _uiController?.RightBoxCollider;
+        public Transform ParentForDrag => _uiController?.ParentForDrag;
+        public Canvas Canvas => _uiController?.Canvas;
+        
         public void AddOnBalance(int countOfMoney)
         {
             _economyData.BalanceLevelManager.TryAdd(countOfMoney);
             _uiController.CanSellItems(true);
         }
-        
-        public void EnableInterface(bool enable) => _interfaceController.EnableInterface(enable);
-        
 
         protected override void RemoveListeners()
         {

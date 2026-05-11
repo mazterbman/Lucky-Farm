@@ -64,6 +64,7 @@ namespace Game.Scripts.Building.ZooShop
                 return;
 
             _countZoo.text = "x" + count;
+            _coastZoo.text = _itemBuy.Coast.ToString("D");
             UpdateStateButton();
         }
         

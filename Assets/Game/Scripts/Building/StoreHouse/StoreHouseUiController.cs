@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Game.Scripts.Economy;
 using Game.Scripts.Mobs;
 using Game.Scripts.Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -28,6 +29,12 @@ namespace Game.Scripts.Building.StoreHouse
 
         [Space] 
         [SerializeField] private Button _sellItemsButtons;
+        [SerializeField] private TMP_Text _totalMoney;
+
+        [Space] 
+        [SerializeField] private BoxCollider _leftStoreCollider;
+        [SerializeField] private BoxCollider _rightStoreCollider;
+        [SerializeField] private Transform _parentForDrag;
 
         [Inject] private MobData _mobData;
         [Inject] private EconomyData _economyData;
@@ -46,6 +53,8 @@ namespace Game.Scripts.Building.StoreHouse
         
         private void Awake()
         {
+            _canvas.gameObject.SetActive(false);
+            
             _tokenSource?.Dispose();
             _tokenSource = new CancellationTokenSource();
             
@@ -117,8 +126,13 @@ namespace Game.Scripts.Building.StoreHouse
             _buildingData.StoreHouseController.StartMoveTrack(countOfMoney);
             ClearGroup(_rightGroup);
             _canSellItems = false;
+            UpdateSellButtonStatus();
         }
 
+        public BoxCollider LeftStoreCollider => _leftStoreCollider;
+        public BoxCollider RightBoxCollider => _rightStoreCollider;
+        public Transform ParentForDrag => _parentForDrag;
+        public Canvas Canvas => _canvas;
         public void CanSellItems(bool value) => _canSellItems = value;
 
 
@@ -151,6 +165,10 @@ namespace Game.Scripts.Building.StoreHouse
         private void UpdateSellButtonStatus()
         {
             _sellItemsButtons.interactable = _rightGroup.Count > 0;
+            
+            int totalMoney = 0;
+            _rightGroup.ForEach(c => totalMoney += c.StoreItem.GetAllCoast());
+            _totalMoney.text = totalMoney.ToString("D");
         }
         
         private void ClearItems()
