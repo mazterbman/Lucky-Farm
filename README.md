@@ -5,7 +5,6 @@
 ![Unity](https://img.shields.io/badge/Unity-6000.4+_LTS-black?style=for-the-badge&logo=unity&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Active_Dev-brightgreen?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 <p align="center">
   <b>3D-прототип фермерской игры с современной архитектурой Unity</b><br/>
@@ -144,18 +143,12 @@ Assets/
 
 ## 📌 Планы
 
-- [ ] 🧭 Система квестов и NPC
+- [ ] 🧭 Система NPC
 - [ ] 💾 Сохранение / загрузка прогресса
 - [ ] 🎨 Улучшенный UI и визуальные эффекты
 
 ---
 
-## 🤝 Вклад в проект
-
-Pull request'ы приветствуются! Для крупных изменений — сначала открой Issue для обсуждения.
-
----
-
 <div align="center">
-  <sub>Сделано с ❤️ на Unity · 2024</sub>
+  <sub>Сделано с ❤️ на Unity · 2026</sub>
 </div>
