@@ -1,10 +1,8 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=28&pause=1000&color=4CAF50&center=true&vCenter=true&width=600&lines=🌾+3D+Farm+Prototype;Fancy+Farm+%7C+Unity+%7C+Active+Dev" alt="Typing SVG" />
-
 <br/>
 
-![Unity](https://img.shields.io/badge/Unity-2021.3+_LTS-black?style=for-the-badge&logo=unity&logoColor=white)
+![Unity](https://img.shields.io/badge/Unity-6000.4+_LTS-black?style=for-the-badge&logo=unity&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Active_Dev-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -97,7 +95,7 @@ Dependency Injection для модульности и тестируемости
 
 ### Требования
 
-- **Unity 2021.3 LTS** или новее
+- **Unity 6000.4 LTS** или новее
 - Git
 
 ### Установка
@@ -122,7 +120,7 @@ com.unity.addressables
 
 ### Запуск
 
-1. Откройте сцену `Assets/Scenes/Game.unity`
+1. Откройте сцену `Assets/Scenes/TestScene.unity`
 2. Нажмите ▶️ **Play**
 
 ---
