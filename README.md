@@ -34,7 +34,7 @@
   Кликабельное превью откроется в YouTube.
 -->
 
-[![Gameplay Preview](https://img.youtube.com/vi/EfrN4kinnQU/maxresdefault.jpg)](https://www.youtube.com/watch?v=EfrN4kinnQU)
+[![Gameplay Preview]](https://www.youtube.com/watch?v=EfrN4kinnQU)
 
 <!--
   ВАРИАНТ 2: Загрузи .mp4 через GitHub Issues (перетащи файл в поле комментария),
