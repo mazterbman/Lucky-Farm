@@ -29,21 +29,7 @@
 
 ## 🎬 Геймплей
 
-<!-- 
-  ВАРИАНТ 1 (рекомендуется): Загрузи видео на YouTube, сделай скриншот и замени ссылки ниже.
-  Кликабельное превью откроется в YouTube.
--->
-
-[![Gameplay Preview]](https://www.youtube.com/watch?v=EfrN4kinnQU)
-
-<!--
-  ВАРИАНТ 2: Загрузи .mp4 через GitHub Issues (перетащи файл в поле комментария),
-  скопируй полученную ссылку и вставь вместо этого комментария:
-  ![Gameplay](https://github.com/user-attachments/assets/ВАШ_ASSET_ID.mp4)
-
-  ВАРИАНТ 3: Запиши GIF (ScreenToGif / LICEcap) и вставь как обычное изображение:
-  ![Gameplay](Assets/Docs/gameplay.gif)
--->
+https://github.com/user-attachments/assets/576f50b6-6f4b-4d56-b042-bdfb2aad8495
 
 ---
 
